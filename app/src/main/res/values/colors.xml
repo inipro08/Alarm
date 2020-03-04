@@ -1,0 +1,93 @@
+<resources>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlue_5">#f0f7ff</color>
+    <color name="colorGraySuperLight">#e6e6e6</color>
+    <color name="colorGrayLight">#aaaaaa</color>
+    <color name="colorGrayMid">#555555</color>
+    <color name="colorM008GrayMid">#737373</color>
+    <color name="colorPrimary">#006db3</color>
+    <color name="colorCyanLight">#039be5</color>
+    <color name="colorPrimaryDark">#039be5</color>
+    <color name="colorAccent">#009FDA</color>
+    <color name="colorBlueLight">#00B0FF</color>
+    <color name="colorM001Cyan">#009fda</color>
+    <color name="colorCyan">#084EAA</color>
+    <color name="colorLight">#006BBD</color>
+    <color name="colorBlue_1">#006bbd</color>
+    <color name="colorBlue_1_50">#80006BBD</color>
+    <color name="colorBlue_2">#003b68</color>
+    <color name="colorBlue_3">#003c87</color>
+    <color name="colorRed">#ff0000</color>
+    <color name="colorRedMid">#c82d03</color>
+    <color name="colorRedDark">#912001</color>
+    <color name="colorBlue_4">#439bd4</color>
+    <color name="colorOrange">#ff771d</color>
+    <color name="colorOrangeMid">#FF6600</color>
+    <color name="colorOrangeDark">#ff661d</color>
+    <color name="colorIndigo">#151742</color>
+    <color name="colorM011Indigo">#021565</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorBlackAlpha">#BF000000</color>
+    <color name="colorBlackAlphaLight">#AF000000</color>
+    <color name="colorM005Lime">#739600</color>
+    <color name="colorM005Orange">#e64a0e</color>
+    <color name="colorM005Red">#ff2d55</color>
+    <color name="colorM009RustyRed">#c8281c</color>
+    <color name="colorM012Orange">#d47600</color>
+    <color name="colorM012Cyan">#009FDA</color>
+    <color name="colorM012Gray">#AEA79F</color>
+    <color name="colorM012Dark">#001323</color>
+    <color name="colorM012ReddishOrange">#e64a0e</color>
+    <color name="colorM012Cerulean">#009fda</color>
+    <color name="colorM012LightGrey">#e0ded8</color>
+    <color name="colorM013GrayBg">#efeff4</color>
+    <color name="colorM013GrayText">#8e8e93</color>
+    <color name="colorM013GrayLine">#bcbbc1</color>
+    <color name="colorM014Red">#e64a0e</color>
+    <color name="colorM014Lime">#c1d82f</color>
+    <color name="colorM015CamouflageGreen">#566c11</color>
+    <color name="colorM015DarkBlue">#001965</color>
+    <color name="colorM016LightGrey">#e0ded8</color>
+    <color name="colorM016GreyishBrown78">#4d4d4d</color>
+    <color name="colorM016DeepSkyBlue">#007aff</color>
+    <color name="colorDarkBlue">#001965</color>
+    <color name="colorBlackBlue">#021565</color>
+    <color name="colorM020Teal">#007fad</color>
+    <color name="colorM023ThinLine">#3f3f3f</color>
+    <color name="colorM024JustNow">#5f5f5f</color>
+    <color name="colorM024InactiveIcon">#9b9b9b</color>
+    <color name="colorM025PaleGrey">#efeff4</color>
+    <color name="colorM025VeryLightPink">#c1c1c1</color>
+    <color name="colorM026ControlPlayer">#b3434447</color>
+    <color name="colorM036Time">#EFEFF4</color>
+    <color name="colorM036Line">#c4c4c4</color>
+    <color name="colorM041GrayText">#4a4a4a</color>
+    <color name="colorTresiba100">#c9dd03</color>
+    <color name="colorTresiba200">#739600</color>
+    <color name="colorFiasp">#e63c2f</color>
+    <color name="colorManilla">#fbe88d</color>
+    <color name="colorM063Red">#fe2851</color>
+    <color name="colorM063Warmgrey">#757575</color>
+    <color name="colorM032ImageBackground">#a6c6d5</color>
+    <color name="colorM032Number">#d0021b</color>
+    <color name="colorM014NoData">#a9a9a9</color>
+    <color name="colorBackground">#33495D</color>
+
+    <color name="colorForeground">#FFFFFF</color>
+
+    <color name="textColorPrimary">#DE000000</color>
+    <color name="textColorSecondary">#8A000000</color>
+
+    <color name="colorNightPrimary">#212121</color>
+    <color name="colorNightPrimaryDark">#000000</color>
+    <color name="colorNightAccent">#FF5252</color>
+    <color name="colorNightForeground">#424242</color>
+
+    <color name="textColorPrimaryNight">#FFFFFF</color>
+    <color name="textColorSecondaryNight">#B3FFFFFF</color>
+
+    <color name="colorIndeterminateBackground">#30565656</color>
+    <color name="colorIndeterminateText">#606060</color>
+    <color name="color_bg_app">#242E42</color>
+
+</resources>

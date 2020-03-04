@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+      android:id="@+id/bottom_alarm"
+      android:icon="@drawable/ic_alarm"
+      android:title="@string/item_alarm" />
+  <item
+      android:id="@+id/bottom_time_zone"
+      android:icon="@drawable/ic_time_zone"
+      android:title="@string/item_time_zone" />
+  <item
+      android:id="@+id/bottom_timer"
+      android:icon="@drawable/ic_timer"
+      android:title="@string/item_timer" />
+</menu>

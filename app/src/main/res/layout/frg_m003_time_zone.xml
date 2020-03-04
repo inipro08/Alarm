@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#242E42"
+    android:orientation="vertical">
+    <FrameLayout
+        android:layout_marginTop="@dimen/d_40"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rl_m003_time_zone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/ib_m003_add_time_zone"
+            android:layout_width="@dimen/d_48"
+            android:layout_height="@dimen/d_48"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="@dimen/d_20"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_add_circle"
+            android:tint="@color/colorBlue_1" />
+
+    </FrameLayout>
+
+
+</LinearLayout>

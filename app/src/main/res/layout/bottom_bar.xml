@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <jahirfiquitiva.libs.fabsmenu.FABsMenuLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabs_menu_clickableOverlay="true"
+        app:fabs_menu_overlayColor="@android:color/transparent">
+
+        <jahirfiquitiva.libs.fabsmenu.FABsMenu
+            android:id="@+id/fabsMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:clipChildren="false"
+            app:fab_expandDirection="up"
+            app:fab_labelsPosition="left"
+            app:fab_menuMargins="16dp"
+            app:fab_moreButtonBackgroundColor="?colorAccent"
+            app:fab_moreButtonPlusIcon="@drawable/ic_add_circle"
+            app:fab_moreButtonRippleColor="?colorPrimary"
+            app:fab_moreButtonSize="normal">
+
+            <jahirfiquitiva.libs.fabsmenu.TitleFAB
+                android:id="@+id/tv_m001_bottom_bar_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                app:backgroundTint="?colorAccent"
+                app:fabSize="mini"
+                app:fab_title="Timer"
+                app:rippleColor="?colorPrimary"
+                app:srcCompat="@drawable/ic_timer" />
+
+            <jahirfiquitiva.libs.fabsmenu.TitleFAB
+                android:id="@+id/tv_m001_bottom_bar_time_zone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:backgroundTint="?colorAccent"
+                app:fabSize="mini"
+                app:fab_title="Time Zone"
+                app:rippleColor="?colorPrimary"
+                app:srcCompat="@drawable/ic_time_zone" />
+
+            <jahirfiquitiva.libs.fabsmenu.TitleFAB
+                android:id="@+id/tv_m001_bottom_bar_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:backgroundTint="?colorAccent"
+                app:fabSize="mini"
+                app:fab_title="Set Alarm"
+                app:rippleColor="?colorPrimary"
+                app:srcCompat="@drawable/ic_alarm" />
+
+        </jahirfiquitiva.libs.fabsmenu.FABsMenu>
+    </jahirfiquitiva.libs.fabsmenu.FABsMenuLayout>
+</FrameLayout>

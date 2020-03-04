@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Alarm Up</string>
+    <string name="txt_confirm_got_it">I got it</string>
+    <string name="item_alarm">Alarm</string>
+    <string name="item_time_zone">Time Zone</string>
+    <string name="item_timer">Timer</string>
+    <string name="txt_channel_notification">This channel of notification of Alarm Now</string>
+
+    <string name="word_day">day</string>
+    <string name="word_days">days</string>
+    <string name="word_minute">minute</string>
+    <string name="word_minutes">minutes</string>
+    <string name="word_hour">hour</string>
+    <string name="word_hours">hours</string>
+    <string name="word_join">and</string>
+
+
+    <string name="msg_sleep_reminder">Your next alarm will ring approximately %s from now. To get your specified amount of sleep in the settings menu, you should go to bed now.</string>
+    <string name="title_sleep_reminder">Sleep Reminder</string>
+    <string name="desc_sleep_reminder">Send a notification reminding you to go to sleep a certain time before your alarm rings if you\'re using your phone.</string>
+    <string name="title_sleep_reminder_time">Sleep Reminder Time</string>
+    <string name="desc_sleep_reminder_time">%1$d hours before</string>
+
+    <string name="title_alarm">Alarm %d</string>
+
+    <string name="title_snooze_custom">Custom…</string>
+    <string name="msg_snoozed_until">Snoozed until %s</string>
+    <string name="txt_ring_default">Morning (Default)</string>
+    <string name="txt_edit_item">Type content alarm..</string>
+    <string name="txt_m002_item_todo">TODO</string>
+    <string name="title_alarm_name">Alarm Name</string>
+    <string name="title_timer">Timer</string>
+</resources>
