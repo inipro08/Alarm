@@ -1,81 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/d_10"
+    android:paddingBottom="@dimen/d_10">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="@dimen/d_300"
-            android:layout_height="@dimen/d_300"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:background="@drawable/circle_shape"
-            android:indeterminate="false"
-            android:max="100"
-            android:progress="65"
-            android:progressDrawable="@drawable/circular_progress_bar" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/ed_m004_item_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Label"
-                android:textColor="#007DD6"
-                android:textSize="@dimen/d_30" />
-
-            <TextView
-                android:id="@+id/tv_m004_item_count_downn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/d_5"
-                android:text="00 : 00 : 00"
-                android:textColor="#007DD6"
-                android:textSize="@dimen/d_30" />
-        </LinearLayout>
-    </FrameLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="@dimen/d_100"
+        android:layout_height="@dimen/d_100"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@drawable/circle_shape"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="65"
+        android:progressDrawable="@drawable/circular_progress_bar" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/d_20">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/d_5"
+        android:orientation="vertical">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fl_m004_item_play_cancel"
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <EditText
+                android:layout_width="0dp"
+                android:id="@+id/ed_m004_item_label"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Label"
+                android:maxLines="1"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="@dimen/d_18" />
+
+            <ImageView
+                android:id="@+id/iv_m004_item_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:src="@drawable/ic_cancel"
+                android:tint="@color/colorAccent" />
+        </TableRow>
+
+        <TextView
+            android:id="@+id/tv_m004_item_count_downn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/ic_play" />
+            android:text="00 : 00 : 00"
+            android:textColor="#007DD6"
+            android:textSize="@dimen/d_25" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/d_30" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fl_m004_item_add_timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/ic_add_timer" />
 
     </LinearLayout>
-
-
 </LinearLayout>

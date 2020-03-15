@@ -301,13 +301,15 @@ public class AlarmEntity implements Parcelable {
      * @param timeMillis A UNIX timestamp specifying the next time for the alarm to ring.
      */
     private void setAlarm(Context context, AlarmManager manager, long timeMillis) {
-        manager.setAlarmClock(
-                new AlarmManager.AlarmClockInfo(
-                        timeMillis,
-                        PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0)
-                ),
-                getIntent(context)
-        );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            manager.setAlarmClock(
+                    new AlarmManager.AlarmClockInfo(
+                            timeMillis,
+                            PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0)
+                    ),
+                    getIntent(context)
+            );
+        }
 
         manager.set(AlarmManager.RTC_WAKEUP,
                 timeMillis - (long) PreferenceEntity.SLEEP_REMINDER_TIME.getValue(context),

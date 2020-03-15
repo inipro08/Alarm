@@ -1,18 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#242E42"
     android:orientation="vertical">
+
     <FrameLayout
-        android:layout_marginTop="@dimen/d_40"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/d_40">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rl_m003_time_zone"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/timezone_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="64dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d_100"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_timezone_empty"
+                    android:tint="@color/colorAccent" />
+
+                <TextView
+                    android:id="@+id/timezone_emptyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    tools:text="@string/txt__timezone_empty_text" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/ib_m003_add_time_zone"
@@ -22,9 +71,6 @@
             android:layout_marginBottom="@dimen/d_20"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_add_circle"
-            android:tint="@color/colorBlue_1" />
-
+            android:tint="@color/colorAccent" />
     </FrameLayout>
-
-
 </LinearLayout>

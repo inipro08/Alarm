@@ -8,5 +8,5 @@ import com.datpt10.alarmup.model.TimerEntity;
 public interface OnM004TimerCallBack extends OnCallBackToView {
     void removeTimer(TimerEntity timerEntity);
 
-    void addTimer();
+    void showNumberPicker(TimerEntity timerEntity);
 }

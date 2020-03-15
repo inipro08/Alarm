@@ -113,9 +113,9 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
                 sound = alarm.getSoundAlarm();
         } else if (getIntent().hasExtra(EXTRA_TIMER)) {
             timer = getIntent().getParcelableExtra(EXTRA_TIMER);
-            isVibrate = timer.isVibrate;
-            if (timer.hasSound())
-                sound = CommonUtil.getInstance().getRingFile();
+//            isVibrate = timer.isVibrate;
+//            if (timer.hasSound())
+//                sound = CommonUtil.getInstance().getRingFile();
         } else finish();
 
         date.setText(FormatUtils.format(new Date(), FormatUtils.FORMAT_DATE + ", " + FormatUtils.getShortFormat(this)));
@@ -244,9 +244,9 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
                     if (which < minutes.length) {
                         TimerEntity timer = alarmio.newTimer();
                         timer.setContentTimer(String.valueOf(TimeUnit.MINUTES.toMillis(minutes[which])), alarmio);
-                        timer.setVibrate(AlarmActivity.this, isVibrate);
-                        timer.setSound(AlarmActivity.this, sound);
-                        timer.set(alarmio, ((AlarmManager) AlarmActivity.this.getSystemService(Context.ALARM_SERVICE)));
+//                        timer.setVibrate(AlarmActivity.this, isVibrate);
+//                        timer.setSound(AlarmActivity.this, sound);
+//                        timer.set(alarmio, ((AlarmManager) AlarmActivity.this.getSystemService(Context.ALARM_SERVICE)));
                         alarmio.onTimerStarted();
                         finish();
                     }

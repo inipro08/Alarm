@@ -9,7 +9,7 @@ import com.datpt10.alarmup.activity.AlarmActivity;
 import com.datpt10.alarmup.model.TimerEntity;
 
 public class TimerReceiver extends BroadcastReceiver {
-    public static final String EXTRA_TIMER_ID = "james.alarmio.EXTRA_TIMER_ID";
+    public static final String EXTRA_TIMER_ID = "com.alarmup.EXTRA_TIMER_ID";
 
     @Override
     public void onReceive(Context context, Intent intent) {

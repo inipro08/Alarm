@@ -94,13 +94,8 @@ public class Alarmio extends Application implements Player.EventListener {
 
         int timerLength = PreferenceEntity.TIMER_LENGTH.getValue(this);
         for (int id = 0; id < timerLength; id++) {
-            TimerEntity timer = new TimerEntity(id, this);
-            if (timer.isSet())
-                timers.add(timer);
+            timers.add(new TimerEntity(id, this));
         }
-
-        if (timerLength > 0)
-            startService(new Intent(this, TimerService.class));
 
         SleepReminderService.refreshSleepTime(this);
     }
@@ -207,6 +202,7 @@ public class Alarmio extends Application implements Player.EventListener {
         for (AlarmListener listener : listeners) {
             listener.onTimersChanged();
         }
+
     }
 
     /**

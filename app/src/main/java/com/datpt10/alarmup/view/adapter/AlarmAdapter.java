@@ -21,7 +21,6 @@ import androidx.transition.TransitionManager;
 
 import com.afollestad.aesthetic.Aesthetic;
 import com.datpt10.alarmnow.widget.AestheticCheckBoxView;
-import com.datpt10.alarmup.Alarmio;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.AlarmEntity;
 import com.datpt10.alarmup.util.CommonUtil;
@@ -35,6 +34,7 @@ import com.datpt10.alarmup.widget.TextAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -51,7 +51,6 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
     private int colorAccent = Color.WHITE;
     private int colorForeground = Color.TRANSPARENT;
     private int textColorPrimary = Color.RED;
-    private Alarmio alarmio;
     private RecyclerView recycler;
 
     public AlarmAdapter(Context mContext, List<AlarmEntity> mListData, OnM002AlarmCallBack mCallBack, RecyclerView recyclerAlarm) {
@@ -237,7 +236,6 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
             valueAnimator.start();
         } else {
             holder.itemView.setBackgroundColor(isExpanded ? mContext.getResources().getColor(R.color.color_bg_app) : Color.TRANSPARENT);
-//            ViewCompat.setElevation(holder.itemView, (float) (isExpanded ? DimenUtils.dpToPx(2.0F) : 0));
         }
         holder.itemView.setOnClickListener(it -> {
             expandedPosition = isExpanded ? -1 : holder.getAdapterPosition();
@@ -296,7 +294,6 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
             alarmHolder.tvSound.setAlpha(alarmEntity1.hasSound() ? 1.0F : 0.333F);
         }
         alarmHolder.ivExpand.animate().rotationX((float) (isExpanded ? 180 : 0)).start();
-//        alarmHolder.tvDelete.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         alarmHolder.tvDelete.setOnClickListener(view -> CommonUtil.getInstance().showDialog(mContext, "Alarm Now", "Do you want to delete this alarm?", "", "Ok", new OnOKDialogCallBack() {
             @Override
             public void handleOKButton2() {
@@ -305,6 +302,11 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
             }
         }));
         onBindAlarmViewHolderExpansion(alarmHolder, position);
+    }
+
+    public void swapeItem(int fromPosition, int toPosition) {
+        Collections.swap(alarmData, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     public class AlarmHolder extends BaseHolder {
@@ -330,85 +332,12 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
             });
         }
 
-        public LinearLayout getLnDay() {
-            return lnDay;
-        }
-
-        public TextView getTvTime() {
-            return tvTime;
-        }
-
-        public void setTvTime(TextView tvTime) {
-            this.tvTime = tvTime;
-        }
-
-        public ImageView getIvExpand() {
-            return ivExpand;
-        }
-
-        public EditText getEdContent() {
-            return edContent;
-        }
-
-        public void setEdContent(EditText edContent) {
-            this.edContent = edContent;
-        }
-
-        public Switch getmSwitch() {
-            return mSwitch;
-        }
-
-        public void setmSwitch(Switch mSwitch) {
-            this.mSwitch = mSwitch;
-        }
-
-        public View getLnExpand() {
-            return lnExpand;
-        }
-
-        public TextView getTvRingFile() {
-            return tvRingFile;
-        }
-
-        public void setTvRingFile(TextView tvRingFile) {
-            this.tvRingFile = tvRingFile;
-        }
-
-        public TextView getTvSound() {
-            return tvSound;
-        }
-
-        public void setTvSound(TextView tvSound) {
-            this.tvSound = tvSound;
-        }
-
-        public TextView getTvDelete() {
-            return tvDelete;
-        }
-
-        public void setTvDelete(TextView tvDelete) {
-            this.tvDelete = tvDelete;
-        }
-
-        public AestheticCheckBoxView getCbRepeat() {
-            return cbRepeat;
-        }
-
-        public void setCbRepeat(AestheticCheckBoxView cbRepeat) {
-            this.cbRepeat = cbRepeat;
-        }
-
         @Override
         protected void onClickView(int idView) {
             switch (idView) {
                 case R.id.tv_m002_view_set_alarm:
-//                    CommonUtil.getInstance().showTimePicker(mContext, tvTime);
-                    break;
                 case R.id.iv_m002_item_expand:
-                    break;
                 case R.id.tv_m002_item_file:
-//                    CommonUtil.getInstance().showListRingTone(mContext, tvRingFile);
-                    break;
                 case R.id.tv_m002_item_delete:
                     break;
             }

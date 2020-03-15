@@ -95,7 +95,7 @@ public class M001HomePageFrg extends BaseFragment<M001HomePagePresenter, OnHomeB
     protected void onClickView(int idView) {
         switch (idView) {
             case R.id.tv_m001_bottom_bar_alarm:
-                showTimePicker(mContext);
+                showChildFrgScreen(TAG, M002AlarmFrg.TAG);
                 menu.collapseImmediately();
                 break;
             case R.id.tv_m001_bottom_bar_time_zone:
@@ -109,22 +109,6 @@ public class M001HomePageFrg extends BaseFragment<M001HomePagePresenter, OnHomeB
             default:
                 break;
         }
-    }
-
-    public void showTimePicker(Context mContext) {
-        Calendar noteCal = Calendar.getInstance();
-        int mHour = noteCal.get(Calendar.HOUR_OF_DAY);
-        int mMin = noteCal.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, (timePicker, hourOfDay, minute) -> {
-            noteCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            noteCal.set(Calendar.MINUTE, minute);
-            AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-            AlarmEntity alarm = getAlarmio().newAlarm();
-            alarm.setTime(mContext, manager, noteCal.getTimeInMillis());
-            alarm.setEnabled(mContext, manager, true);
-            showChildFrgScreen(TAG, M002AlarmFrg.TAG);
-        }, mHour, mMin, false);
-        timePickerDialog.show();
     }
 
     @Override

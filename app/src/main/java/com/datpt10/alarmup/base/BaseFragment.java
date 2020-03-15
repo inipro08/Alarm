@@ -29,6 +29,7 @@ import com.datpt10.alarmup.ANApplication;
 import com.datpt10.alarmup.Alarmio;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.AlarmEntity;
+import com.datpt10.alarmup.model.TimerEntity;
 import com.datpt10.alarmup.presenter.BasePresenter;
 import com.datpt10.alarmup.util.CommonUtil;
 import com.datpt10.alarmup.util.StorageCommon;
@@ -60,7 +61,6 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
     protected int mId;
     protected View mClickedView;
     private Alarmio alarmio;
-    private List<AlarmEntity> dataList;
 
     protected abstract void initViews();
 
@@ -108,6 +108,9 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
         return alarmio.getAlarms();
     }
 
+    protected List<TimerEntity> getTimerList() {
+        return alarmio.getTimers();
+    }
 
     public String getTagCurrentChildSource() {
         return mTagCurrentChildSource;

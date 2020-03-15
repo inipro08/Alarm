@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -33,7 +34,8 @@
                 app:fabSize="mini"
                 app:fab_title="Timer"
                 app:rippleColor="?colorPrimary"
-                app:srcCompat="@drawable/ic_timer" />
+                app:srcCompat="@drawable/ic_timer"
+                tools:ignore="VectorDrawableCompat" />
 
             <jahirfiquitiva.libs.fabsmenu.TitleFAB
                 android:id="@+id/tv_m001_bottom_bar_time_zone"
@@ -51,9 +53,10 @@
                 android:layout_height="wrap_content"
                 app:backgroundTint="?colorAccent"
                 app:fabSize="mini"
-                app:fab_title="Set Alarm"
+                app:fab_title="Alarm"
                 app:rippleColor="?colorPrimary"
-                app:srcCompat="@drawable/ic_alarm" />
+                app:srcCompat="@drawable/ic_alarm"
+                tools:ignore="VectorDrawableCompat" />
 
         </jahirfiquitiva.libs.fabsmenu.FABsMenu>
     </jahirfiquitiva.libs.fabsmenu.FABsMenuLayout>

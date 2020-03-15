@@ -30,4 +30,8 @@
     <string name="txt_m002_item_todo">TODO</string>
     <string name="title_alarm_name">Alarm Name</string>
     <string name="title_timer">Timer</string>
+
+    <string name="txt_alarm_empty_text">Alarm is empty, \nPress the \'+\' button to create one</string>
+    <string name="txt__timezone_empty_text">TimeZone is empty, \nPress the \'+\' button to create one</string>
+
 </resources>

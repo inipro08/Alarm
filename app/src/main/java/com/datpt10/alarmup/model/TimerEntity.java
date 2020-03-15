@@ -4,10 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import androidx.annotation.Nullable;
 
 import com.datpt10.alarmup.receiver.TimerReceiver;
 
@@ -23,11 +22,10 @@ public class TimerEntity implements Parcelable {
             return new TimerEntity[size];
         }
     };
-    public boolean isVibrate = true;
     private int id;
-    private String sound;
     private String labelTimer;
     private long time;
+    private long duration;
 
     public TimerEntity(int id) {
         this.id = id;
@@ -36,21 +34,15 @@ public class TimerEntity implements Parcelable {
     public TimerEntity(int id, Context context) {
         this.id = id;
         labelTimer = PreferenceEntity.TIMER_LABEL.getSpecificValue(context, id);
-        try {
-            time = PreferenceEntity.TIMER_SET_TIME.getSpecificValue(context, id);
-        } catch (ClassCastException e) {
-            time = (int) PreferenceEntity.TIMER_SET_TIME.getSpecificValue(context, id);
-        }
-        isVibrate = PreferenceEntity.TIMER_VIBRATE.getSpecificValue(context, id);
-        sound = PreferenceEntity.TIMER_SOUND.getSpecificValue(context, id);
+        time = PreferenceEntity.TIMER_SET_TIME.getSpecificValue(context, id);
+        duration = PreferenceEntity.TIMER_DURATION.getSpecificValue(context, id);
     }
 
     protected TimerEntity(Parcel in) {
         id = in.readInt();
         labelTimer = in.readString();
         time = in.readLong();
-        isVibrate = in.readByte() != 0;
-        sound = in.readString();
+        duration = in.readLong();
     }
 
     /**
@@ -62,12 +54,9 @@ public class TimerEntity implements Parcelable {
     public void onIdChanged(int id, Context context) {
         PreferenceEntity.TIMER_LABEL.setValue(context, labelTimer, id);
         PreferenceEntity.TIMER_SET_TIME.setValue(context, time, id);
-        PreferenceEntity.TIMER_VIBRATE.setValue(context, isVibrate, id);
-        PreferenceEntity.TIMER_SOUND.setValue(context, sound != null ? sound.toString() : null, id);
-        onRemoved(context);
+        PreferenceEntity.TIMER_DURATION.setValue(context, duration, id);
+//        onRemoved(context);
         this.id = id;
-        if (isSet())
-            set(context, (AlarmManager) context.getSystemService(Context.ALARM_SERVICE));
     }
 
     /**
@@ -79,8 +68,7 @@ public class TimerEntity implements Parcelable {
         cancel(context, (AlarmManager) context.getSystemService(Context.ALARM_SERVICE));
         PreferenceEntity.TIMER_LABEL.setValue(context, null, id);
         PreferenceEntity.TIMER_SET_TIME.setValue(context, null, id);
-        PreferenceEntity.TIMER_VIBRATE.setValue(context, null, id);
-        PreferenceEntity.TIMER_SOUND.setValue(context, null, id);
+        PreferenceEntity.TIMER_DURATION.setValue(context, null, id);
     }
 
     /**
@@ -102,6 +90,10 @@ public class TimerEntity implements Parcelable {
         return time;
     }
 
+    public long getDuration() {
+        return duration;
+    }
+
     /**
      * The total length of the timer.
      *
@@ -114,69 +106,32 @@ public class TimerEntity implements Parcelable {
     /**
      * Set the duration of the timer.
      *
-     * @param duration The total length of the timer, in milliseconds.
-     * @param context  An active Context instance.
+     * @param content The total length of the timer, in milliseconds.
+     * @param context An active Context instance.
      */
-    public void setContentTimer(String duration, Context context) {
-        this.labelTimer = duration;
-        PreferenceEntity.TIMER_LABEL.setValue(context, duration, id);
-    }
-
-    /**
-     * Set whether the timer should vibrate when it goes off.
-     *
-     * @param context   An active Context instance.
-     * @param isVibrate Whether the timer should vibrate.
-     */
-    public void setVibrate(Context context, boolean isVibrate) {
-        this.isVibrate = isVibrate;
-        PreferenceEntity.TIMER_VIBRATE.setValue(context, isVibrate, id);
-    }
-
-    /**
-     * Return whether the timer has a sound or not.
-     *
-     * @return A boolean defining whether a sound has been set
-     * for the timer.
-     */
-    public boolean hasSound() {
-        return sound != null;
-    }
-
-    /**
-     * Get the [SoundData](./SoundData) sound specified for the timer.
-     *
-     * @return An instance of SoundData describing the sound that
-     * the timer should make (or null).
-     */
-    @Nullable
-    public String getSound() {
-        return sound;
-    }
-
-    /**
-     * Set the sound that the timer should make.
-     *
-     * @param context An active context instance.
-     * @param sound   A [SoundData](./SoundData) defining the sound that
-     *                the timer should make.
-     */
-    public void setSound(Context context, String sound) {
-        this.sound = sound;
-        PreferenceEntity.TIMER_SOUND.setValue(context, sound != null ? sound.toString() : null, id);
+    public void setContentTimer(String content, Context context) {
+        this.labelTimer = content;
+        PreferenceEntity.TIMER_LABEL.setValue(context, content, id);
     }
 
     /**
      * Set the next time for the timer to ring.
      *
      * @param context An active context instance.
-     * @param manager The AlarmManager to schedule the timer on.
      */
-    public void set(Context context, AlarmManager manager) {
-        time = System.currentTimeMillis();
-        setAlarm(context, manager);
-
+    public void set(Context context, long millis) {
+        time = millis;
         PreferenceEntity.TIMER_SET_TIME.setValue(context, time, id);
+    }
+
+    /**
+     * Set the time duration progressBar
+     *
+     * @param context An active context instance.
+     */
+    public void setDuration(Context context, long millisDuration) {
+        duration = millisDuration;
+        PreferenceEntity.TIMER_DURATION.setValue(context, duration, id);
     }
 
     /**
@@ -186,7 +141,9 @@ public class TimerEntity implements Parcelable {
      * @param manager The AlarmManager to schedule the alert on.
      */
     public void setAlarm(Context context, AlarmManager manager) {
-        manager.setExact(AlarmManager.RTC_WAKEUP, time, getIntent(context));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            manager.setExact(AlarmManager.RTC_WAKEUP, time, getIntent(context));
+        }
     }
 
     /**
@@ -198,7 +155,6 @@ public class TimerEntity implements Parcelable {
     public void cancel(Context context, AlarmManager manager) {
         time = 0;
         manager.cancel(getIntent(context));
-
         PreferenceEntity.TIMER_SET_TIME.setValue(context, time, id);
     }
 
@@ -223,8 +179,7 @@ public class TimerEntity implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(labelTimer);
-        parcel.writeLong(time);
-        parcel.writeByte((byte) (isVibrate ? 1 : 0));
-        parcel.writeString(sound);
+        parcel.writeLong( time);
+        parcel.writeLong( duration);
     }
 }

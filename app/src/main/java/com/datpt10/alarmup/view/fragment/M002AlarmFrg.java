@@ -1,6 +1,11 @@
 package com.datpt10.alarmup.view.fragment;
 
+import android.app.AlarmManager;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +20,8 @@ import com.datpt10.alarmup.presenter.M002AlarmPresenter;
 import com.datpt10.alarmup.view.adapter.AlarmAdapter;
 import com.datpt10.alarmup.view.event.OnM001HomePageCallBack;
 import com.datpt10.alarmup.view.event.OnM002AlarmCallBack;
-import com.datpt10.alarmup.view.adapter.AlarmAdapter;
+
+import java.util.Calendar;
 
 import io.reactivex.disposables.Disposable;
 
@@ -27,16 +33,21 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
     public static final String TAG = M002AlarmFrg.class.getName();
     private AlarmAdapter alarmAdapter;
     private RecyclerView recyclerAlarm;
-
     private Disposable colorAccentSubscription;
     private Disposable colorForegroundSubscription;
     private Disposable textColorPrimarySubscription;
+    private View empty;
+    private TextView emptyText;
 
 
     @Override
     protected void initViews() {
         recyclerAlarm = findViewById(R.id.rl_m002_list_alarm);
-        recyclerAlarm.setLayoutManager(new LinearLayoutManager(mContext));
+        empty = findViewById(R.id.empty);
+        emptyText = findViewById(R.id.emptyText);
+        findViewById(R.id.ig_m002_add_alarm, this);
+        emptyText.setText(R.string.txt_alarm_empty_text);
+        recyclerAlarm.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         recyclerAlarm.setHasFixedSize(true);
         recyclerAlarm.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         alarmAdapter = new AlarmAdapter(mContext, getAlarmList(), this, recyclerAlarm);
@@ -73,11 +84,15 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
 
     @Override
     protected void defineBackKey() {
-
     }
 
     @Override
     protected void onClickView(int idView) {
+        switch (idView) {
+            case R.id.ig_m002_add_alarm:
+                showTimePicker(mContext);
+                break;
+        }
     }
 
     @Override
@@ -97,18 +112,28 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
     }
 
     private void onChanged() {
-//        set background alarm while alarm empty
-//        if (empty != null && alarmAdapter != null)
-//            empty.setVisibility(alarmAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
+        if (empty != null && alarmAdapter != null)
+            empty.setVisibility(alarmAdapter.getAlarmData().size() > 0 ? View.GONE : View.VISIBLE);
+    }
+
+    public void showTimePicker(Context mContext) {
+        Calendar noteCal = Calendar.getInstance();
+        int mHour = noteCal.get(Calendar.HOUR_OF_DAY);
+        int mMin = noteCal.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, (timePicker, hourOfDay, minute) -> {
+            noteCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            noteCal.set(Calendar.MINUTE, minute);
+            AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+            AlarmEntity alarm = getAlarmio().newAlarm();
+            alarm.setTime(mContext, manager, noteCal.getTimeInMillis());
+            alarm.setEnabled(mContext, manager, true);
+            initViews();
+        }, mHour, mMin, false);
+        timePickerDialog.show();
     }
 
     @Override
     public void onTimersChanged() {
-        if (recyclerAlarm != null && alarmAdapter != null) {
-            recyclerAlarm.post(() -> alarmAdapter.notifyDataSetChanged());
-
-            onChanged();
-        }
     }
 
     @Override

@@ -54,7 +54,6 @@ public class TimerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mTimerLeftInMillis = intent.getExtras().getLong("TIMERLEFT");
 
         countDownTimer = new CountDownTimer(mTimerLeftInMillis, 1000) {
             @Override

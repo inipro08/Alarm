@@ -1,6 +1,7 @@
 package com.datpt10.alarmup.view.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -21,7 +22,6 @@ import java.util.List;
  */
 public class TimeZoneAdapter extends BaseRecycleAdapter<OnM003TimeZoneCallBack, TimeZoneEntity, TimeZoneAdapter.TimeZoneHolder> {
 
-    public static final String NOTE_TIME_FORMAT = "hh:mm";
     DBManager dbManager = new DBManager(mContext);
 
     public TimeZoneAdapter(Context mContext, List<TimeZoneEntity> mListData, OnM003TimeZoneCallBack mCallBack) {
@@ -44,7 +44,9 @@ public class TimeZoneAdapter extends BaseRecycleAdapter<OnM003TimeZoneCallBack, 
         TimeZoneEntity timeZoneEntity = mListData.get(position);
         zoneHolder.itemView.setTag(timeZoneEntity);
         zoneHolder.tvCity.setText(timeZoneEntity.getCity().substring(timeZoneEntity.getCity().lastIndexOf("/") + 1));
-        zoneHolder.tvTimeZone.setTimeZone(timeZoneEntity.getCity());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            zoneHolder.tvTimeZone.setTimeZone(timeZoneEntity.getCity());
+        }
         zoneHolder.tvDate.setText(CommonUtil.getInstance().getDateCity(timeZoneEntity.getCity()));
     }
 
@@ -53,12 +55,12 @@ public class TimeZoneAdapter extends BaseRecycleAdapter<OnM003TimeZoneCallBack, 
         notifyItemInserted(pos);
     }
 
-    public void removeItem(int pos) {
+    private void removeItem(int pos) {
         mListData.remove(pos);
         notifyItemRemoved(pos);
     }
 
-    public void updateListData(List<TimeZoneEntity> entityList) {
+    private void updateListData(List<TimeZoneEntity> entityList) {
         mListData = entityList;
         notifyDataSetChanged();
     }
@@ -67,17 +69,15 @@ public class TimeZoneAdapter extends BaseRecycleAdapter<OnM003TimeZoneCallBack, 
         TextView tvCity, tvDate;
         TextClock tvTimeZone;
 
-        public TimeZoneHolder(View itemView) {
+        TimeZoneHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String name = mListData.get(getAdapterPosition()).getCity();
-                    dbManager.deleteTitle(name);
-                    removeItem(getAdapterPosition());
-                    notifyDataSetChanged();
-                    updateListData(mListData);
-                }
+            itemView.setOnClickListener(v -> {
+                String name = mListData.get(getAdapterPosition()).getCity();
+                dbManager.deleteTitle(name);
+                removeItem(getAdapterPosition());
+                notifyDataSetChanged();
+                updateListData(mListData);
+                mCallBack.changedView();
             });
         }
 

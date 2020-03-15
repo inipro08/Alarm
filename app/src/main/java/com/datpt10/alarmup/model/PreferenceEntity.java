@@ -1,5 +1,6 @@
 package com.datpt10.alarmup.model;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -29,8 +30,9 @@ public enum PreferenceEntity {
     ALARM_DAY_ENABLED("%1$d/ALARM_DAY/%2$d/ENABLED", false),
     ALARM_VIBRATE("%d/ALARM_VIBRATE", true),
     ALARM_SOUND("%d/ALARM_SOUND", ""),
-    TIMER_LABEL("%d/TIMER_DURATION", 600000),
-    TIMER_SET_TIME("%d/TIMER_END_TIME", 0),
+    TIMER_LABEL("%d/TIMER_LABEL", ""),
+    TIMER_SET_TIME("%d/TIMER_SET_TIME", (long) 0),
+    TIMER_DURATION("%d/TIMER_DURATION", (long) 0),
     TIMER_VIBRATE("%d/TIMER_VIBRATE", true),
     TIMER_SOUND("%d/TIMER_SOUND", ""),
     TIME_ZONE_ENABLED("%s/TIME_ZONE_ENABLED", false);
@@ -74,6 +76,7 @@ public enum PreferenceEntity {
         return getSpecificOverriddenValue(context, (T) getDefaultValue(), args);
     }
 
+    @SuppressLint("UseValueOf")
     public <T> T getSpecificOverriddenValue(Context context, @Nullable T defaultValue, @Nullable Object... args) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String name = getName(args);
@@ -129,7 +132,6 @@ public enum PreferenceEntity {
                     } catch (ClassCastException ignored) {
                     }
                 }
-
                 throw new TypeMismatchException(this, type.getClass());
             }
         }
