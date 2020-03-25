@@ -1,5 +1,6 @@
 package com.datpt10.alarmup.util;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,29 +8,30 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
+import android.database.Cursor;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
 import com.datpt10.alarmup.ANApplication;
+import com.datpt10.alarmup.Alarmio;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.AlarmEntity;
+import com.datpt10.alarmup.model.SoundEntity;
 import com.datpt10.alarmup.view.event.OnOKDialogCallBack;
 
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
@@ -39,30 +41,14 @@ import static android.content.Context.MODE_PRIVATE;
 public class CommonUtil {
     public static final int GREY_LIST = 1;
     public static final String TAG = CommonUtil.class.getName();
-    public static final String SAVE_DATA = "save_data";
-    public static final String TIME_FORMAT = "HH : mm";
-    public static final String DATE_FORMAT = "dd/MM/yyyy";
-    public static final String KEY_NOTIFY = "KEY_NOTIFY";
-    public static final String HOUR_NOTIFY = "HOUR_NOTIFY";
-    public static final String MINUTE_NOTIFY = "MINUTE_NOTIFY";
-    public static final String CONTENT_NOTIFY = "CONTENT_NOTIFY";
-    public static final String RING_NOTIFY = "RING_NOTIFY";
-    public static final String REPEAT_NOTIFY = "REPEAT_NOTIFY";
-    public static final String ID_NOTIFY = "ID_NOTIFY";
-    public static final String DATE_NOW_DY = "yyyy-MM-dd";
-    public static final String ALARM_NOW = "ALARM_NOW";
-    private static final int ALARM_REQUEST_CODE = 1590;
-    private static final int NOTIFICATION_ID_MIN = 0;
-    public static LOG_TYPE mDebugType = LOG_TYPE.INFO;
-    public static int TAB_MENU_ALARM = 0;
-    public static int TAB_MENU_NEW = 1;
-    public static int TAB_MENU_SETTING = 2;
-    public static int TAB_SNOOZE_5 = 0;
-    public static int TAB_SNOOZE_10 = 1;
-    public static int TAB_SNOOZE_15 = 2;
+    private static final String SAVE_DATA = "save_data";
+    private static final String TIME_FORMAT = "HH : mm";
+    private static final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final String DATE_NOW_DY = "yyyy-MM-dd";
+    private static LOG_TYPE mDebugType = LOG_TYPE.INFO;
 
-    public static CommonUtil instance;
-    public Map<String, String> mBackFlow;
+    private static CommonUtil instance;
+    private Map<String, String> mBackFlow;
 
     /**
      * CommonUtil
@@ -111,8 +97,7 @@ public class CommonUtil {
             System.out.println(tag + ":" + text);
         }
     }
-
-
+    
     public static String getDateNow(String dateStyle) {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat(dateStyle, Locale.getDefault());
@@ -331,58 +316,45 @@ public class CommonUtil {
         editor.apply();
     }
 
-    public String getRingFile() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        String firstNameSong = "";
-        Field[] fields = R.raw.class.getFields();
-        for (Field field : fields) {
-            arrayList.add(field.getName());
-        }
-        firstNameSong = arrayList.get(0);
-        return firstNameSong;
-    }
-
-    public void showListRingTone(Context context, TextView tvRingFile, AlarmEntity alarmEntity1) {
-        ArrayList<String> arrayList;
+    public void showListRingTone(Context context, TextView tvRingFile, AlarmEntity alarmEntity1, Alarmio mAlarmio) {
+        ArrayList<SoundEntity> sounds;
         ArrayAdapter<String> adapter;
-        final MediaPlayer[] mediaPlayer = {new MediaPlayer()};
+        List<String> soundName;
 
         int[] item = new int[1];
-        arrayList = new ArrayList<>();
-        Field[] fields = R.raw.class.getFields();
-        for (Field field : fields) {
-            arrayList.add(field.getName());
+        sounds = new ArrayList<>();
+        RingtoneManager manager = new RingtoneManager(context);
+        manager.setType(RingtoneManager.TYPE_ALARM);
+        Cursor cursor = manager.getCursor();
+        int count = cursor.getCount();
+        if (count > 0 && cursor.moveToFirst()) {
+            do {
+                sounds.add(new SoundEntity(cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX), SoundEntity.TYPE_RINGTONE, cursor.getString(RingtoneManager.URI_COLUMN_INDEX) + "/" + cursor.getString(RingtoneManager.ID_COLUMN_INDEX)));
+            } while (cursor.moveToNext());
         }
-        adapter = new ArrayAdapter<>(context, android.R.layout.simple_expandable_list_item_1, arrayList);
-
+        soundName = new ArrayList<>();
+        for (int i = 0; i < sounds.size(); i++) {
+            soundName.add(sounds.get(i).getName());
+        }
+        adapter = new ArrayAdapter<>(context, android.R.layout.simple_expandable_list_item_1, soundName);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Choose a ringtone alarm...");
         builder.setAdapter(adapter, null);
         AlertDialog alertDialog = builder.create();
-        alertDialog.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mediaPlayer[0] != null) {
-                    mediaPlayer[0].release();
-                }
-                int resId = context.getResources().getIdentifier(arrayList.get(position), "raw", context.getPackageName());
-                mediaPlayer[0] = MediaPlayer.create(context, resId);
-                mediaPlayer[0].start();
-                item[0] = position;
+        alertDialog.getListView().setOnItemClickListener((parent, view, position, id) -> {
+            SoundEntity soundEntity = sounds.get(position);
+            if (soundEntity.isPlaying(mAlarmio)) {
+                soundEntity.stop(mAlarmio);
+            } else {
+                soundEntity.preview(mAlarmio);
             }
+            item[0] = position;
         });
         alertDialog.getListView().setDividerHeight(2);
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OKAY", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int position) {
-                CharSequence[] sequences = arrayList.toArray(new String[arrayList.size()]);
-                String ringName = sequences[item[0]].toString();
-                tvRingFile.setText(ringName);
-                alarmEntity1.setSound(context, ringName);
-                if (mediaPlayer[0] != null) {
-                    mediaPlayer[0].release();
-                }
-            }
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OKAY", (dialog, position) -> {
+            sounds.get(item[0]).stop(mAlarmio);
+            tvRingFile.setText(sounds.get(item[0]).getName());
+            alarmEntity1.setSound(context, sounds.get(item[0]));
         });
         alertDialog.show();
     }
@@ -390,7 +362,7 @@ public class CommonUtil {
     public String getDateCity(String zoneId) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         dateFormat.setTimeZone(TimeZone.getTimeZone(zoneId));
         String date = dateFormat.format(calendar.getTime());

@@ -42,10 +42,9 @@ public class M003TimeZoneFrg extends BaseFragment<M003TimeZonePresenter, OnM001H
         findViewById(R.id.ib_m003_add_time_zone, this);
         timezoneEmpty = findViewById(R.id.timezone_empty);
         timezoneTextEmpty = findViewById(R.id.timezone_emptyText);
-        timezoneTextEmpty.setText(R.string.txt__timezone_empty_text);
+        timezoneTextEmpty.setText(R.string.txt_timezone_empty_text);
         rlTimeZone = findViewById(R.id.rl_m003_time_zone);
         rlTimeZone.setLayoutManager(new LinearLayoutManager(mContext));
-        rlTimeZone.setHasFixedSize(true);
         mListTimeZone = dbManager.getAllTimeZone();
         timeZoneAdapter = new TimeZoneAdapter(mContext, mListTimeZone, this);
         rlTimeZone.setAdapter(timeZoneAdapter);
@@ -80,7 +79,7 @@ public class M003TimeZoneFrg extends BaseFragment<M003TimeZonePresenter, OnM001H
 
     private void onTimeZoneChanged() {
         if (timezoneEmpty != null && timeZoneAdapter != null)
-            timezoneEmpty.setVisibility(dbManager.getAllTimeZone().size() > 0 ? View.GONE : View.VISIBLE);
+            timezoneEmpty.setVisibility(timeZoneAdapter.getListData().size() > 0 ? View.GONE : View.VISIBLE);
     }
 
     public void showListTimeZone(Context context, String city, String hour) {
@@ -111,7 +110,7 @@ public class M003TimeZoneFrg extends BaseFragment<M003TimeZonePresenter, OnM001H
 
     private void addItem(String mNameCity) {
         TimeZoneEntity entity = new TimeZoneEntity(mNameCity);
-        timeZoneAdapter.addItem(0, entity);
+        timeZoneAdapter.addItem(timeZoneAdapter.getListData().size(), entity);
         dbManager.addTimeZone(entity);
         onTimeZoneChanged();
     }

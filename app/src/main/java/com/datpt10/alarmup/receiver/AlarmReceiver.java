@@ -14,7 +14,7 @@ import com.datpt10.alarmup.model.AlarmEntity;
  */
 public class AlarmReceiver extends BroadcastReceiver {
 
-    public static final String EXTRA_ALARM_ID = "james.alarmio.EXTRA_ALARM_ID";
+    public static final String EXTRA_ALARM_ID = "com.datpt10.alarmup.receiver.AlarmReceiver.EXTRA_ALARM_ID";
 
     @Override
     public void onReceive(Context context, Intent intent) {

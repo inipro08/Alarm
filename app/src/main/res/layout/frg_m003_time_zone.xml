@@ -3,13 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#242E42"
+    android:background="@color/color_bg_app"
     android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/d_40">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rl_m003_time_zone"
@@ -54,7 +53,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/colorAccent"
                     android:textSize="18sp"
-                    tools:text="@string/txt__timezone_empty_text" />
+                    tools:text="@string/txt_timezone_empty_text" />
             </LinearLayout>
 
             <View

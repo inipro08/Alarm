@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.datpt10.alarmup.ANApplication;
@@ -157,7 +158,7 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
 
 
     @Override
-    public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView..." + getTAG());
         setTagCurrentFrg();
         setRetainInstance(true);
@@ -240,8 +241,7 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
     }
 
     @SuppressLint("ResourceType")
-    protected void showChildFrgScreen(String tagSource, String
-            tagChild) {
+    protected void showChildFrgScreen(String tagSource, String tagChild) {
         if (getContentLayout() == LAYOUT_NONE) return;
 
         Log.d(TAG, "showChildFrgScreen...");
@@ -428,7 +428,7 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
 
     @Override
     public void requestPermissions(String... permissions) {
-//        ActivityCompat.requestPermissions(, permissions, 0);
+        ActivityCompat.requestPermissions(getActivity(), permissions, 0);
     }
 
     @Override

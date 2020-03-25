@@ -113,4 +113,5 @@
     <dimen name="d_55">55dp</dimen>
     <dimen name="d_386">386dp</dimen>
     <dimen name="d_82">82dp</dimen>
-  </resources>
+    <dimen name="d_110">110dp</dimen>
+</resources>

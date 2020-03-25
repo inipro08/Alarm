@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.base.BaseFragment;
 import com.datpt10.alarmup.model.TimerEntity;
-import com.datpt10.alarmup.presenter.M004SettingPresenter;
+import com.datpt10.alarmup.presenter.M004TimerPresenter;
 import com.datpt10.alarmup.view.adapter.TimerAdapter;
 import com.datpt10.alarmup.view.event.OnM001HomePageCallBack;
 import com.datpt10.alarmup.view.event.OnM004TimerCallBack;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * create by datpt on 10/25/2019.
  */
-public class M004TimerFrg extends BaseFragment<M004SettingPresenter, OnM001HomePageCallBack> implements OnM004TimerCallBack {
+public class M004TimerFrg extends BaseFragment<M004TimerPresenter, OnM001HomePageCallBack> implements OnM004TimerCallBack {
     public static final String TAG = M004TimerFrg.class.getName();
     private NumberPicker mNumberHour, mNumberMinute, mNumberSecond;
     private TextView tvHour, tvMinute, tvSecond;
@@ -35,7 +35,6 @@ public class M004TimerFrg extends BaseFragment<M004SettingPresenter, OnM001HomeP
 
     @Override
     protected void initViews() {
-
         fl_Play_Pause = findViewById(R.id.fl_m004_add_timer, this);
         tvHour = findViewById(R.id.tv_m004_hours);
         tvMinute = findViewById(R.id.tv_m004_minutes);
@@ -51,6 +50,7 @@ public class M004TimerFrg extends BaseFragment<M004SettingPresenter, OnM001HomeP
         mNumberSecond = findViewById(R.id.number_m004_second);
         mNumberSecond.setMaxValue(60);
         mNumberSecond.setMinValue(0);
+
         trCountDown = findViewById(R.id.tr_m004_countDown);
         mNumberHour.setOnScrollListener((numberPicker, i) -> {
             fl_Play_Pause.setVisibility(numberPicker.getValue() == 0 ? View.GONE : View.VISIBLE);
@@ -61,8 +61,17 @@ public class M004TimerFrg extends BaseFragment<M004SettingPresenter, OnM001HomeP
         mNumberSecond.setOnScrollListener((numberPicker, i) -> {
             fl_Play_Pause.setVisibility(numberPicker.getValue() == 0 ? View.GONE : View.VISIBLE);
         });
+        isVisibleListTimer();
         timerAdapter = new TimerAdapter(mContext, getTimerList(), this, lvTimer);
         lvTimer.setAdapter(timerAdapter);
+    }
+
+    void isVisibleListTimer() {
+        if (getTimerList().size() == 0) {
+            showViewTimer(true);
+        } else {
+            showViewTimer(false);
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -72,7 +81,6 @@ public class M004TimerFrg extends BaseFragment<M004SettingPresenter, OnM001HomeP
             imgAddTimer.setVisibility(View.GONE);
             trCountDown.setVisibility(View.VISIBLE);
             fl_Play_Pause.setVisibility(View.VISIBLE);
-
         } else {
             lvTimer.setVisibility(View.VISIBLE);
             imgAddTimer.setVisibility(View.VISIBLE);
@@ -87,8 +95,8 @@ public class M004TimerFrg extends BaseFragment<M004SettingPresenter, OnM001HomeP
     }
 
     @Override
-    protected M004SettingPresenter getPresenter() {
-        return new M004SettingPresenter(this);
+    protected M004TimerPresenter getPresenter() {
+        return new M004TimerPresenter(this);
     }
 
     @Override
@@ -120,14 +128,15 @@ public class M004TimerFrg extends BaseFragment<M004SettingPresenter, OnM001HomeP
                 break;
             case R.id.ig_m004_add_timer:
                 showViewTimer(true);
+                setNumberPickerDefault();
                 break;
         }
     }
 
-    @Override
-    public void showNumberPicker(TimerEntity timerEntity) {
-        mTimerEntity = timerEntity;
-        showViewTimer(true);
+    void setNumberPickerDefault(){
+        mNumberHour.setValue(0);
+        mNumberMinute.setValue(0);
+        mNumberSecond.setValue(0);
     }
 
     @Override

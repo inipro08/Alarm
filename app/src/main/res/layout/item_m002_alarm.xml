@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#242E42"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/d_10">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +30,8 @@
                     android:layout_height="wrap_content"
                     android:text="06 : 56"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/d_35" />
+                    android:textSize="@dimen/d_30"
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="0dp"
@@ -55,11 +56,11 @@
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_marginStart="@dimen/d_4"
-                    android:layout_marginEnd="@dimen/d_12"
-                    android:src="@drawable/ic_time_left"
-                    android:tint="@color/colorWhite"
                     android:layout_marginLeft="@dimen/d_4"
-                    android:layout_marginRight="@dimen/d_12" />
+                    android:layout_marginEnd="@dimen/d_12"
+                    android:layout_marginRight="@dimen/d_12"
+                    android:src="@drawable/ic_time_left"
+                    android:tint="@color/colorWhite" />
 
                 <TextView
                     android:id="@+id/nextTime"
@@ -67,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/d_5"
                     android:layout_marginBottom="6dp"
-                    android:textColor="@color/colorM008GrayMid"
+                    android:textColor="@color/colorWhite"
                     android:textSize="@dimen/d_14"
                     tools:text="Next alarm: 14:00 Friday, January 26" />
             </TableRow>
@@ -91,13 +92,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="-2dp"
+                    android:layout_marginLeft="-2dp"
                     android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
                     android:gravity="center_vertical"
                     android:text="Repeat"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/d_14"
-                    android:layout_marginLeft="-2dp"
-                    android:layout_marginRight="@dimen/d_10" />
+                    android:textSize="@dimen/d_14" />
 
                 <LinearLayout
                     android:id="@+id/days"
@@ -152,12 +153,12 @@
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_sound"
-                    android:tint="@color/colorWhite"
-                    android:layout_marginLeft="@dimen/d_4"
-                    android:layout_marginRight="@dimen/d_12"
                     android:layout_marginStart="@dimen/d_4"
-                    android:layout_marginEnd="@dimen/d_12" />
+                    android:layout_marginLeft="@dimen/d_4"
+                    android:layout_marginEnd="@dimen/d_12"
+                    android:layout_marginRight="@dimen/d_12"
+                    android:src="@drawable/ic_sound"
+                    android:tint="@color/colorWhite" />
 
                 <TextView
                     android:id="@+id/tv_m002_item_sound"
@@ -173,12 +174,12 @@
                     android:id="@+id/tv_m002_item_file"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/d_8"
                     android:gravity="center_vertical"
                     android:text="@string/txt_ring_default"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/d_15"
-                    android:textStyle="bold"
-                    android:layout_marginRight="@dimen/d_8" />
+                    android:textStyle="bold" />
             </TableRow>
 
             <TableRow
@@ -187,14 +188,14 @@
                 android:layout_marginTop="@dimen/d_13">
 
                 <ImageView
-                    android:layout_width="@dimen/d_18"
                     android:id="@+id/iv_m002_item_label"
+                    android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_label"
-                    android:tint="@color/colorWhite"
                     android:layout_marginLeft="@dimen/d_4"
-                    android:layout_marginRight="@dimen/d_12" />
+                    android:layout_marginRight="@dimen/d_12"
+                    android:src="@drawable/ic_label"
+                    android:tint="@color/colorWhite" />
 
                 <EditText
                     android:id="@+id/ed_m002_item_content"
@@ -202,19 +203,20 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:textStyle="bold"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
-                    android:hint="@string/title_alarm_name"
+                    android:hint="@string/txt_alarm_label"
                     android:inputType="textCapWords|textAutoComplete|textAutoCorrect"
                     android:lines="1"
                     android:maxLines="1"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
+                    android:paddingVertical="@dimen/d_4"
+                    android:paddingLeft="@dimen/d_5"
                     android:singleLine="true"
                     android:textColor="@color/colorWhite"
                     android:textCursorDrawable="@null"
                     android:textSize="@dimen/d_16"
-                    android:textStyle="bold" />
+                    android:paddingStart="@dimen/d_5" />
             </TableRow>
         </LinearLayout>
 
@@ -226,14 +228,14 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="@dimen/d_18"
                 android:id="@+id/iv_m002_item_delete"
+                android:layout_width="@dimen/d_18"
                 android:layout_height="@dimen/d_18"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_delete"
-                android:tint="@color/colorWhite"
                 android:layout_marginLeft="@dimen/d_4"
-                android:layout_marginRight="@dimen/d_12" />
+                android:layout_marginRight="@dimen/d_12"
+                android:src="@drawable/ic_delete"
+                android:tint="@color/colorWhite" />
 
             <TextView
                 android:id="@+id/tv_m002_item_delete"
@@ -253,9 +255,9 @@
                 android:id="@+id/iv_m002_item_expand"
                 android:layout_width="@dimen/d_18"
                 android:layout_height="@dimen/d_18"
+                android:layout_marginRight="@dimen/d_10"
                 android:src="@drawable/ic_arrow_down"
-                android:tint="@color/colorWhite"
-                android:layout_marginRight="@dimen/d_10" />
+                android:tint="@color/colorWhite" />
         </TableRow>
     </LinearLayout>
 </LinearLayout>

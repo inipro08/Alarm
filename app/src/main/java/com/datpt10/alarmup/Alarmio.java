@@ -10,7 +10,6 @@ import android.location.Criteria;
 import android.location.LocationManager;
 import android.media.Ringtone;
 import android.net.Uri;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -23,11 +22,10 @@ import com.afollestad.aesthetic.Aesthetic;
 import com.afollestad.aesthetic.AutoSwitchMode;
 import com.datpt10.alarmup.model.AlarmEntity;
 import com.datpt10.alarmup.model.PreferenceEntity;
+import com.datpt10.alarmup.model.SoundEntity;
 import com.datpt10.alarmup.model.TimerEntity;
 import com.datpt10.alarmup.service.SleepReminderService;
 import com.datpt10.alarmup.service.TimerService;
-import com.datpt10.alarmup.util.CommonUtil;
-import com.datpt10.alarmup.util.DebugUtils;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -50,14 +48,11 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class Alarmio extends Application implements Player.EventListener {
-    // h
-
     public static final int THEME_DAY_NIGHT = 0;
     public static final int THEME_DAY = 1;
     public static final int THEME_NIGHT = 2;
     public static final int THEME_AMOLED = 3;
 
-    public static final String NOTIFICATION_CHANNEL_STOPWATCH = "stopwatch";
     public static final String NOTIFICATION_CHANNEL_TIMERS = "timers";
     private static final String TAG = Alarmio.class.getName();
     private SharedPreferences prefs;
@@ -75,7 +70,7 @@ public class Alarmio extends Application implements Player.EventListener {
     public void onCreate() {
         super.onCreate();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        DebugUtils.setup(this);
+//        DebugUtils.setup(this);
         Log.i(TAG, "Alarmio---");
         listeners = new ArrayList<>();
         alarms = new ArrayList<>();
@@ -115,7 +110,7 @@ public class Alarmio extends Application implements Player.EventListener {
      */
     public AlarmEntity newAlarm() {
         AlarmEntity alarm = new AlarmEntity(alarms.size(), Calendar.getInstance());
-        alarm.soundAlarm = CommonUtil.getInstance().getRingFile();
+        alarm.soundAlarm = SoundEntity.fromString(PreferenceEntity.DEFAULT_ALARM_RINGTONE.getValue(this, ""));
         alarms.add(alarm);
         onAlarmCountChanged();
         return alarm;
@@ -140,7 +135,6 @@ public class Alarmio extends Application implements Player.EventListener {
 
     public void removeAlarmList(AlarmEntity alarmEntity) {
         alarmEntity.onRemoved(this);
-
     }
 
     /**
@@ -231,8 +225,9 @@ public class Alarmio extends Application implements Player.EventListener {
                     .isDark(true)
                     .lightStatusBarMode(AutoSwitchMode.OFF)
                     .colorPrimary(ContextCompat.getColor(this, R.color.colorNightPrimary))
-                    .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : ContextCompat.getColor(this, R.color.colorNightPrimaryDark))
-                    .colorNavigationBar(ContextCompat.getColor(this, R.color.colorNightPrimaryDark))
+                    .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorWhite))
+                    .colorStatusBar(ContextCompat.getColor(this, R.color.colorWhite))
+                    .colorNavigationBar(ContextCompat.getColor(this, R.color.colorBlack))
                     .colorAccent(ContextCompat.getColor(this, R.color.colorNightAccent))
                     .colorCardViewBackground(ContextCompat.getColor(this, R.color.colorNightForeground))
                     .colorWindowBackground(ContextCompat.getColor(this, R.color.colorNightPrimaryDark))
@@ -248,12 +243,13 @@ public class Alarmio extends Application implements Player.EventListener {
                         .isDark(false)
                         .lightStatusBarMode(AutoSwitchMode.ON)
                         .colorPrimary(ContextCompat.getColor(this, R.color.colorPrimary))
-                        .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .colorNavigationBar(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+                        .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorWhite))
+                        .colorStatusBar(ContextCompat.getColor(this, R.color.colorWhite))
+                        .colorNavigationBar(ContextCompat.getColor(this, R.color.colorBlack))
                         .colorAccent(ContextCompat.getColor(this, R.color.colorAccent))
                         .colorCardViewBackground(ContextCompat.getColor(this, R.color.colorForeground))
                         .colorWindowBackground(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .textColorPrimary(ContextCompat.getColor(this, R.color.textColorPrimary))
+                        .textColorPrimary(ContextCompat.getColor(this, R.color.colorWhite))
                         .textColorSecondary(ContextCompat.getColor(this, R.color.textColorSecondary))
                         .textColorPrimaryInverse(ContextCompat.getColor(this, R.color.textColorPrimaryNight))
                         .textColorSecondaryInverse(ContextCompat.getColor(this, R.color.textColorSecondaryNight))
@@ -263,7 +259,8 @@ public class Alarmio extends Application implements Player.EventListener {
                         .isDark(true)
                         .lightStatusBarMode(AutoSwitchMode.OFF)
                         .colorPrimary(Color.BLACK)
-                        .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : Color.BLACK)
+                        .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorWhite))
+                        .colorStatusBar(ContextCompat.getColor(this, R.color.colorWhite))
                         .colorNavigationBar(Color.BLACK)
                         .colorAccent(Color.WHITE)
                         .colorCardViewBackground(Color.BLACK)
@@ -444,7 +441,6 @@ public class Alarmio extends Application implements Player.EventListener {
     public void stopCurrentSound() {
         if (isRingtonePlaying())
             currentRingtone.stop();
-
         stopStream();
     }
 
@@ -458,9 +454,10 @@ public class Alarmio extends Application implements Player.EventListener {
 
     public void setListener(ActivityListener listener) {
         this.listener = listener;
-
-        if (listener != null)
-            updateTheme();
+//
+//        if (listener != null) {
+//            updateTheme();
+//        }
     }
 
     @Override

@@ -15,7 +15,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.datpt10.alarmup.ANApplication;
+import com.datpt10.alarmup.Alarmio;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.presenter.BasePresenter;
 import com.datpt10.alarmup.util.CommonUtil;
@@ -26,15 +29,16 @@ import com.datpt10.alarmup.widget.ProgressLoading;
 
 
 public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackToView> extends
-        Dialog implements View.OnClickListener, Animation.AnimationListener {
+        Dialog implements View.OnClickListener, Animation.AnimationListener, Alarmio.AlarmListener, Alarmio.ActivityListener {
     private static final CharSequence PLACE_HOLDER = "PLACEHOLDER";
     private static final String TAG = "DIALOG";
-    protected T mPresenter;
-    protected H mCallBack;
+    private T mPresenter;
+    private H mCallBack;
     protected Context mContext;
-    protected boolean isAnimEnd = true;
-    protected Animation mAnim;
-    protected int mId;
+    private boolean isAnimEnd = true;
+    private Animation mAnim;
+    private int mId;
+    private Alarmio alarmio;
 
     public BaseDialog(Context context) {
         this(context, false);
@@ -54,6 +58,8 @@ public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackTo
         mPresenter = getPresenter();
         mAnim = AnimationUtils.loadAnimation(mContext, R.anim.alpha);
         mAnim.setAnimationListener(this);
+        alarmio = (Alarmio) mContext.getApplicationContext();
+        alarmio.addListener(this);
         initViews();
     }
 
@@ -67,7 +73,14 @@ public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackTo
         mPresenter = getPresenter();
         mAnim = AnimationUtils.loadAnimation(mContext, R.anim.alpha);
         mAnim.setAnimationListener(this);
+        alarmio = (Alarmio) mContext.getApplicationContext();
+        alarmio.addListener(this);
         initViews();
+    }
+
+    @Nullable
+    protected Alarmio getAlarmio() {
+        return alarmio;
     }
 
     public void showLockDialog() {
@@ -167,6 +180,13 @@ public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackTo
 
     protected void highLightText(TextView mTvTitle, int start, int end, int color, boolean isBold, int size) {
         highLightText(mTvTitle, start, end, color, isBold, size, null);
+    }
+
+    @Override
+    public void dismiss() {
+        alarmio.removeListener(this);
+        alarmio = null;
+        super.dismiss();
     }
 
     protected void highLightText(TextView mTvTitle, int start, int end, int color, int size, Typeface typeface) {

@@ -1,6 +1,7 @@
 package com.datpt10.alarmup.view.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.TimerEntity;
@@ -30,6 +32,7 @@ import java.util.TimerTask;
 public class TimerAdapter extends ArrayAdapter<TimerEntity> {
     private static final String TAG = TimerAdapter.class.getName();
     private final List<TimeHolder> lstHolders;
+    private String[] mColors = {"#42CDCA", "#4fa6d3", "#4879af", "#63539e", "#5e4270"};
     private List<TimerEntity> listTimerEntity;
     private LayoutInflater inflater;
     private ListView lvTimer;
@@ -67,18 +70,6 @@ public class TimerAdapter extends ArrayAdapter<TimerEntity> {
         }, 1000, 1000);
     }
 
-    private TimerEntity getTimer(int position) {
-        int alarmSize = listTimerEntity.size();
-        TimerEntity data;
-        if (0 <= position) {
-            if (alarmSize > position) {
-                data = listTimerEntity.get(position);
-                return data;
-            }
-        }
-        return null;
-    }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -90,6 +81,8 @@ public class TimerAdapter extends ArrayAdapter<TimerEntity> {
             holder.tvTimer = convertView.findViewById(R.id.tv_m004_item_count_downn);
             holder.progressBarTimer = convertView.findViewById(R.id.progressBar);
             holder.ivDelete = convertView.findViewById(R.id.iv_m004_item_delete);
+            holder.cardView = convertView.findViewById(R.id.cardViewTimer);
+            holder.cardView.setCardBackgroundColor(Color.parseColor(mColors[position % 5]));
             convertView.setTag(holder);
             synchronized (lstHolders) {
                 lstHolders.add(holder);
@@ -101,13 +94,14 @@ public class TimerAdapter extends ArrayAdapter<TimerEntity> {
             timerCallBack.removeTimer(listTimerEntity.get(position));
             lvTimer.invalidateViews();
         });
+        TimeHolder finalHolder = holder;
         holder.edContentTimer.addTextChangedListener(new TextAdapter() {
             @Override
             public void afterTextChanged(Editable s) {
+                finalHolder.edContentTimer.setBackgroundColor(getContext().getResources().getColor(R.color.colorBgEditText));
                 listTimerEntity.get(position).setContentTimer(s.toString(), getContext());
             }
         });
-        holder.tvTimer.setOnClickListener(v -> timerCallBack.showNumberPicker(listTimerEntity.get(position)));
         holder.setData(listTimerEntity.get(position));
         return convertView;
     }
@@ -116,6 +110,7 @@ public class TimerAdapter extends ArrayAdapter<TimerEntity> {
         EditText edContentTimer;
         TextView tvTimer;
         ImageView ivDelete;
+        CardView cardView;
         ProgressBar progressBarTimer;
         TimerEntity timerEntity;
 

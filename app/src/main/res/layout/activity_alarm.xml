@@ -1,64 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:keepScreenOn="true">
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/content_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/d_40"
+        android:text="Content Alarm"
+        android:textAlignment="center"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="@dimen/d_28"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/d_10"
+        android:text="June 14 2017, 3:49 PM"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="26sp"
+        android:textStyle="bold" />
 
     <ImageView
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        tools:src="@tools:sample/backgrounds/scenic"/>
+        android:id="@+id/idea"
+        android:layout_width="@dimen/d_60"
+        android:layout_height="@dimen/d_60"
+        android:layout_gravity="center"
+        android:layout_marginVertical="@dimen/d_10"
+        android:src="@drawable/ic_idea"
+        android:tint="@color/colorWhite" />
 
-    <View
-        android:id="@+id/overlay"
+    <TextView
+        android:id="@+id/question_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.5"
-        android:background="@color/colorPrimary" />
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/d_10"
+        android:layout_weight="0.2"
+        android:text="@string/txt_activity_alarm_may_be"
+        android:textAlignment="center"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="19sp"
+        android:textStyle="bold" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="@dimen/d_30"
+        android:layout_weight="1"
+        android:lineSpacingExtra="5dp"
+        android:text="@string/txt_activity_alarm_may_be"
+        android:textAlignment="center"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="@dimen/d_18" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_100"
+        android:layout_weight="0.1">
+
+        <Button
+            android:id="@+id/bt_more_time"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/d_50"
+            android:layout_marginHorizontal="@dimen/d_30"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:background="@drawable/bg_bt_app"
+            android:text="More 5 Minutes"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/d_16" />
 
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="June 14 2017, 3:49 PM"
-                android:textAlignment="center"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="-0:13"
-                android:textAlignment="center"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="48sp" />
-
-        </LinearLayout>
-
-        <com.datpt10.alarmup.widget.AestheticSlideActionView
-            android:id="@+id/slideView"
-            android:layout_width="match_parent"
-            android:layout_height="96dp" />
-
-    </LinearLayout>
-
-</FrameLayout>
+        <Button
+            android:id="@+id/bt_cancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/d_50"
+            android:layout_marginHorizontal="@dimen/d_30"
+            android:layout_weight="1"
+            android:background="@drawable/bg_bt_app"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/d_16" />
+    </TableRow>
+</LinearLayout>

@@ -8,16 +8,12 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/d_35"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rl_m002_list_alarm"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/d_10"
-            android:paddingHorizontal="@dimen/d_15" />
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/empty"
@@ -25,7 +21,7 @@
             android:layout_height="match_parent"
             android:animateLayoutChanges="true"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -37,7 +33,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/d_80"
+                    android:layout_height="@dimen/d_100"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:paddingLeft="32dp"
@@ -65,16 +61,15 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
         </LinearLayout>
-    </FrameLayout>
 
-    <ImageButton
-        android:id="@+id/ig_m002_add_alarm"
-        android:layout_width="@dimen/d_55"
-        android:layout_height="@dimen/d_55"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="@dimen/d_20"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_add_circle"
-        android:tint="@color/colorAccent"
-        android:visibility="visible" />
+        <ImageButton
+            android:id="@+id/ig_m002_add_alarm"
+            android:layout_width="@dimen/d_48"
+            android:layout_height="@dimen/d_48"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="@dimen/d_20"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_add_circle"
+            android:tint="@color/colorAccent" />
+    </FrameLayout>
 </LinearLayout>

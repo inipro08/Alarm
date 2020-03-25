@@ -47,10 +47,11 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
         emptyText = findViewById(R.id.emptyText);
         findViewById(R.id.ig_m002_add_alarm, this);
         emptyText.setText(R.string.txt_alarm_empty_text);
+
         recyclerAlarm.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         recyclerAlarm.setHasFixedSize(true);
         recyclerAlarm.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-        alarmAdapter = new AlarmAdapter(mContext, getAlarmList(), this, recyclerAlarm);
+        alarmAdapter = new AlarmAdapter(mContext, getAlarmList(), this, recyclerAlarm, getAlarmio());
         recyclerAlarm.setAdapter(alarmAdapter);
 
         colorAccentSubscription = Aesthetic.Companion.get()
@@ -88,10 +89,8 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
 
     @Override
     protected void onClickView(int idView) {
-        switch (idView) {
-            case R.id.ig_m002_add_alarm:
-                showTimePicker(mContext);
-                break;
+        if (idView == R.id.ig_m002_add_alarm) {
+            showTimePicker(mContext);
         }
     }
 
@@ -141,4 +140,5 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
         assert getAlarmio() != null;
         getAlarmio().removeAlarm(alarmEntity);
     }
+
 }

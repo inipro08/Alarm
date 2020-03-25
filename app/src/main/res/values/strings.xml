@@ -15,7 +15,7 @@
     <string name="word_join">and</string>
 
 
-    <string name="msg_sleep_reminder">Your next alarm will ring approximately %s from now. To get your specified amount of sleep in the settings menu, you should go to bed now.</string>
+    <string name="msg_sleep_reminder">The alarm will ring about %s from now.</string>
     <string name="title_sleep_reminder">Sleep Reminder</string>
     <string name="desc_sleep_reminder">Send a notification reminding you to go to sleep a certain time before your alarm rings if you\'re using your phone.</string>
     <string name="title_sleep_reminder_time">Sleep Reminder Time</string>
@@ -28,10 +28,17 @@
     <string name="txt_ring_default">Morning (Default)</string>
     <string name="txt_edit_item">Type content alarm..</string>
     <string name="txt_m002_item_todo">TODO</string>
-    <string name="title_alarm_name">Alarm Name</string>
+    <string name="txt_alarm_label">Alarm Label</string>
+    <string name="txt_timer_label">Timer Label</string>
     <string name="title_timer">Timer</string>
 
     <string name="txt_alarm_empty_text">Alarm is empty, \nPress the \'+\' button to create one</string>
-    <string name="txt__timezone_empty_text">TimeZone is empty, \nPress the \'+\' button to create one</string>
+    <string name="txt_timezone_empty_text">TimeZone is empty, \nPress the \'+\' button to create one</string>
+
+    <string name="title_sound_none">None</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_activity_alarm_may_be">Maybe you don\'t know ?</string>
 
 </resources>

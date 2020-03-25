@@ -53,6 +53,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends Activity imp
         Log.i(TAG, "BaseActivity: onCreate...");
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
         int layoutId = getLayoutId();
         if (layoutId != NO_LAYOUT) {
             setContentView(layoutId);

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/d_10"
-        app:cardCornerRadius="@dimen/d_8"
-        app:cardBackgroundColor="#2F3B52"
-        android:elevation="@dimen/d_20"
+        android:layout_height="@dimen/d_100"
         android:layout_marginHorizontal="@dimen/d_15"
-        android:layout_height="@dimen/d_100">
+        android:layout_marginTop="@dimen/d_10"
+        android:elevation="@dimen/d_20"
+        app:cardCornerRadius="@dimen/d_8"
+        tools:ignore="UnusedAttribute">
 
         <TableRow
             android:layout_width="match_parent"
@@ -24,17 +26,20 @@
                 android:id="@+id/tv_m003_item_city"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/d_20"
                 android:layout_marginLeft="@dimen/d_20"
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="CITY"
                 android:textAllCaps="true"
-                android:textColor="@color/colorBlue_1"
-                android:textSize="@dimen/d_18" />
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/d_18"
+                tools:ignore="SpUsage" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/d_20"
                 android:layout_marginRight="@dimen/d_20"
                 android:layout_weight="1"
                 android:gravity="center|right"
@@ -45,8 +50,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12 : 40"
-                    android:textColor="@color/colorBlue_1"
-                    android:textSize="@dimen/d_30" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/d_30"
+                    tools:ignore="NewApi,SpUsage" />
 
                 <View
                     android:layout_width="@dimen/d_50"
@@ -60,11 +66,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/d_5"
                     android:text="Date"
-                    android:textColor="@color/colorBlue_1"
-                    android:textSize="@dimen/d_16" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/d_16"
+                    tools:ignore="SpUsage" />
             </LinearLayout>
         </TableRow>
     </androidx.cardview.widget.CardView>
-
-
 </LinearLayout>

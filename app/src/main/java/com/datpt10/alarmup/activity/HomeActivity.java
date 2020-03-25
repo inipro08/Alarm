@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
+import com.datpt10.alarmup.Alarmio;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.base.BaseActivity;
 import com.datpt10.alarmup.base.BaseFragment;
@@ -24,6 +25,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements OnHomeB
     private static final String ALREADY_VALUE = "YES";
     private final HashMap<String, BaseFragment> mFrags = new HashMap<>();
     private AlertDialog mAlertDialog;
+    private Alarmio alarmio;
 
     @Override
     protected int getLayoutId() {
@@ -39,9 +41,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements OnHomeB
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-//        if (intent != null) {
-//            showFrgScreen(TAG, M005AlarmNowFrg.TAG);
-//        }
+
     }
 
     @Override
@@ -89,7 +89,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements OnHomeB
             try {
                 getFragmentManager().beginTransaction()
                         .setCustomAnimations(R.animator.alpha_in, R.animator.alpha_out)
-                        .replace(R.id.content, frg).commit();
+                        .replace(R.id.question_content, frg).commit();
             } catch (Exception ignore) {
                 ignore.printStackTrace();
             }
@@ -135,17 +135,14 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements OnHomeB
     @Override
     public void showM001Landing(int isActive) {
         Log.i(TAG, "showM001Landing : ");
-
         if (mAlertDialog != null && mAlertDialog.isShowing()) return;
-        switch (isActive) {
-            case CommonUtil.GREY_LIST:
-                getStorage().setFlagM001Active(true);
-                String flagAlreadyCheck = getStorage().getFlag();
-                if (flagAlreadyCheck == null || !flagAlreadyCheck.equals(ALREADY_VALUE)) {
-                    getStorage().setmFlag(ALREADY_VALUE);
-                }
-                showFrgScreen(TAG, M001HomePageFrg.TAG);
-                break;
+        if (isActive == CommonUtil.GREY_LIST) {
+            getStorage().setFlagM001Active(true);
+            String flagAlreadyCheck = getStorage().getFlag();
+            if (flagAlreadyCheck == null || !flagAlreadyCheck.equals(ALREADY_VALUE)) {
+                getStorage().setmFlag(ALREADY_VALUE);
+            }
+            showFrgScreen(TAG, M001HomePageFrg.TAG);
         }
     }
 

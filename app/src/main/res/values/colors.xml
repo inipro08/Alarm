@@ -86,8 +86,9 @@
     <color name="textColorPrimaryNight">#FFFFFF</color>
     <color name="textColorSecondaryNight">#B3FFFFFF</color>
 
+    <color name="colorBgEditText">#26565656</color>
     <color name="colorIndeterminateBackground">#30565656</color>
     <color name="colorIndeterminateText">#606060</color>
-    <color name="color_bg_app">#242E42</color>
+    <color name="color_bg_app">#222222</color>
 
 </resources>

@@ -152,7 +152,7 @@ public class SleepReminderService extends Service {
                 startForeground(540, builder.setContentTitle(getString(R.string.title_sleep_reminder))
                         .setContentText(String.format(getString(R.string.msg_sleep_reminder),
                                 FormatUtils.formatUnit(this, (int) TimeUnit.MILLISECONDS.toMinutes(nextAlarm.getNext().getTimeInMillis() - System.currentTimeMillis()))))
-                        .setSmallIcon(R.drawable.ic_notification_sleep)
+                        .setSmallIcon(R.drawable.ic_alarm)
                         .setPriority(NotificationCompat.PRIORITY_LOW)
                         .setCategory(NotificationCompat.CATEGORY_SERVICE)
                         .build());

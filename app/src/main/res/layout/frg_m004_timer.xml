@@ -3,14 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#242E42">
+    android:background="@color/color_bg_app">
 
     <ListView
         android:id="@+id/lv_m004_timer"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="@dimen/d_10"
-        android:layout_marginTop="@dimen/d_55"
         android:visibility="gone" />
 
     <ImageButton
@@ -21,7 +19,7 @@
         android:layout_marginBottom="@dimen/d_20"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_add_circle"
-        android:tint="@color/colorBlue_1"
+        android:tint="@color/colorAccent"
         android:visibility="gone" />
 
     <TableRow

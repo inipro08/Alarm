@@ -14,7 +14,6 @@ import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.activity.HomeActivity;
 import com.datpt10.alarmup.receiver.AlarmReceiver;
 import com.datpt10.alarmup.service.SleepReminderService;
-import com.datpt10.alarmup.util.CommonUtil;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +35,7 @@ public class AlarmEntity implements Parcelable {
     public Calendar timerAlarm;
     public boolean isEnabledToggle = true;
     public boolean[] daysSelect = new boolean[7];
-    public String soundAlarm;
+    public SoundEntity soundAlarm;
     private int id;
     //    public boolean isVibrate = true;
 
@@ -55,7 +54,7 @@ public class AlarmEntity implements Parcelable {
             daysSelect[i] = PreferenceEntity.ALARM_DAY_ENABLED.getSpecificValue(context, id, i);
         }
 //        isVibrate = PreferenceData.ALARM_VIBRATE.getSpecificValue(context, id);
-        soundAlarm = PreferenceEntity.ALARM_SOUND.getSpecificOverriddenValue(context, CommonUtil.getInstance().getRingFile(), id)
+        soundAlarm = SoundEntity.fromString(PreferenceEntity.ALARM_SOUND.getSpecificOverriddenValue(context, PreferenceEntity.DEFAULT_ALARM_RINGTONE.getValue(context, ""), id));
         ;
     }
 
@@ -67,7 +66,8 @@ public class AlarmEntity implements Parcelable {
         isEnabledToggle = in.readByte() != 0;
         daysSelect = in.createBooleanArray();
 //        isVibrate = in.readByte() != 0;
-        soundAlarm = in.readString();
+        if (in.readByte() == 1)
+            soundAlarm = SoundEntity.fromString(in.readString());
     }
 
     /**
@@ -84,7 +84,7 @@ public class AlarmEntity implements Parcelable {
             PreferenceEntity.ALARM_DAY_ENABLED.setValue(context, daysSelect[i], id, i);
         }
 //        PreferenceData.ALARM_VIBRATE.setValue(context, isVibrate, id);
-        PreferenceEntity.ALARM_SOUND.setValue(context, soundAlarm, id);
+        PreferenceEntity.ALARM_SOUND.setValue(context, soundAlarm != null ? soundAlarm.toString() : null, id);
 
         onRemoved(context);
         this.id = id;
@@ -226,7 +226,7 @@ public class AlarmEntity implements Parcelable {
      * the alarm should make (or null).
      */
     @Nullable
-    public String getSoundAlarm() {
+    public SoundEntity getSoundAlarm() {
         return soundAlarm;
     }
 
@@ -237,7 +237,7 @@ public class AlarmEntity implements Parcelable {
      * @param sound   A [SoundData](./SoundData) defining the sound that
      *                the alarm should make.
      */
-    public void setSound(Context context, @Nullable String sound) {
+    public void setSound(Context context, @Nullable SoundEntity sound) {
         this.soundAlarm = sound;
         PreferenceEntity.ALARM_SOUND.setValue(context, sound != null ? sound.toString() : null, id);
     }
@@ -289,6 +289,7 @@ public class AlarmEntity implements Parcelable {
      */
     public Date set(Context context, AlarmManager manager) {
         Calendar nextTime = getNext();
+        assert nextTime != null;
         setAlarm(context, manager, nextTime.getTimeInMillis());
         return nextTime.getTime();
     }

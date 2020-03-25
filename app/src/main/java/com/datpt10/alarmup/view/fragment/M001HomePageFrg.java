@@ -1,9 +1,6 @@
 package com.datpt10.alarmup.view.fragment;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.widget.FrameLayout;
@@ -12,12 +9,9 @@ import androidx.core.content.ContextCompat;
 
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.base.BaseFragment;
-import com.datpt10.alarmup.model.AlarmEntity;
 import com.datpt10.alarmup.presenter.M001HomePagePresenter;
 import com.datpt10.alarmup.view.event.OnHomeBackToView;
 import com.datpt10.alarmup.view.event.OnM001HomePageCallBack;
-
-import java.util.Calendar;
 
 import jahirfiquitiva.libs.fabsmenu.FABsMenu;
 import jahirfiquitiva.libs.fabsmenu.FABsMenuListener;
