@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,7 +23,7 @@ import androidx.transition.TransitionManager;
 
 import com.afollestad.aesthetic.Aesthetic;
 import com.datpt10.alarmnow.widget.AestheticCheckBoxView;
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.AlarmEntity;
 import com.datpt10.alarmup.util.CommonUtil;
@@ -49,17 +50,17 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
     private AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
     private List<AlarmEntity> alarmData;
     private int expandedPosition = -1;
-    private Alarmio mAlarmio;
+    private Alarmup mAlarmup;
     private int colorAccent = Color.WHITE;
     private int colorForeground = Color.TRANSPARENT;
     private int textColorPrimary = Color.RED;
     private RecyclerView recycler;
 
-    public AlarmAdapter(Context mContext, List<AlarmEntity> mListData, OnM002AlarmCallBack mCallBack, RecyclerView recyclerAlarm, Alarmio alarmio) {
+    public AlarmAdapter(Context mContext, List<AlarmEntity> mListData, OnM002AlarmCallBack mCallBack, RecyclerView recyclerAlarm, Alarmup alarmup) {
         super(mContext, mListData, mCallBack);
         this.alarmData = mListData;
         this.recycler = recyclerAlarm;
-        this.mAlarmio = alarmio;
+        this.mAlarmup = alarmup;
     }
 
     public List<AlarmEntity> getAlarmData() {
@@ -77,7 +78,7 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
         }
     }
 
-    public final int getColorForeground() {
+    private int getColorForeground() {
         return this.colorForeground;
     }
 
@@ -86,10 +87,6 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
         if (expandedPosition > 0) {
             recycler.post(() -> notifyItemChanged(expandedPosition));
         }
-    }
-
-    public final int getTextColorPrimary() {
-        return this.textColorPrimary;
     }
 
     public final void setTextColorPrimary(int textColorPrimary) {
@@ -239,8 +236,9 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
         holder.itemView.setOnClickListener(it -> {
             expandedPosition = isExpanded ? -1 : holder.getAdapterPosition();
             AutoTransition transition = new AutoTransition();
-            transition.setDuration(200);
+            transition.setDuration(140);
             TransitionManager.beginDelayedTransition(recycler, transition);
+            holder.edContent.clearFocus();
             recycler.post(this::notifyDataSetChanged);
         });
     }
@@ -253,7 +251,7 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
         alarmHolder.itemView.setBackgroundColor(Color.parseColor(mColors[position % 5]));
         alarmHolder.edContent.setFocusableInTouchMode(isExpanded);
         alarmHolder.edContent.setCursorVisible(false);
-        alarmHolder.edContent.clearFocus();
+        assert alarmEntity1 != null;
         alarmHolder.edContent.setText(alarmEntity1.getContent(mContext));
         if (isExpanded) {
             alarmHolder.edContent.setOnClickListener(null);
@@ -261,10 +259,8 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
             alarmHolder.edContent.setOnClickListener(it -> holder.itemView.callOnClick());
         }
         alarmHolder.edContent.setOnFocusChangeListener(($noName_0, hasFocus) -> alarmHolder.edContent.setCursorVisible(hasFocus && holder.getAdapterPosition() == expandedPosition));
-
         alarmHolder.mSwitch.setOnCheckedChangeListener(null);
         alarmHolder.mSwitch.setChecked(alarmEntity1.isEnabledToggle);
-
         alarmHolder.mSwitch.setOnCheckedChangeListener(($noName_0, b) -> {
             alarmEntity1.setEnabled(mContext, alarmManager, b);
             AutoTransition transition = new AutoTransition();
@@ -272,20 +268,28 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
             TransitionManager.beginDelayedTransition(recycler, transition);
             recycler.post(this::notifyDataSetChanged);
         });
+        alarmHolder.cbVibrate.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (alarmHolder.cbVibrate.isChecked()) {
+                alarmEntity1.setVibrate(mContext, "Vibrate");
+            } else {
+                alarmEntity1.setVibrate(mContext, "");
+            }
+        });
+        if (alarmEntity1.getVibrate(mContext).equals(""))
+            alarmHolder.cbVibrate.setChecked(false);
+        else alarmHolder.cbVibrate.setChecked(true);
         alarmHolder.tvTime.setText(FormatUtils.formatShort(mContext, alarmEntity1.timerAlarm.getTime()));
         alarmHolder.tvTime.setOnClickListener(view -> CommonUtil.getInstance().showTimePicker(mContext, alarmHolder.tvTime, alarmEntity1, alarmManager));
-
         alarmHolder.tvNextTime.setVisibility(alarmEntity1.isEnabledToggle ? View.VISIBLE : View.GONE);
         alarmHolder.ivNextTime.setVisibility(alarmEntity1.isEnabledToggle ? View.VISIBLE : View.GONE);
-
         Calendar nextAlarm = alarmEntity1.getNext();
         if (alarmEntity1.isEnabledToggle && nextAlarm != null) {
             int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(nextAlarm.getTimeInMillis() - Calendar.getInstance().getTimeInMillis());
             alarmHolder.tvNextTime.setText(String.format("%s from now.", FormatUtils.formatUnit(mContext, minutes)));
         }
-        alarmHolder.tvRingFile.setText(alarmEntity1.hasSound() ? alarmEntity1.getSoundAlarm().getName() : "None");
+        alarmHolder.tvRingFile.setText(CommonUtil.getInstance().getFirstRingtone(mContext, alarmEntity1));
         alarmHolder.tvRingFile.setOnClickListener(view -> {
-            CommonUtil.getInstance().showListRingTone(mContext, alarmHolder.tvRingFile, alarmEntity1, mAlarmio);
+            CommonUtil.getInstance().showListRingTone(mContext, alarmHolder.tvRingFile, alarmEntity1, mAlarmup);
         });
         if (isExpanded) {
             onBindAlarmViewHolderRepeat(alarmHolder, alarmEntity1);
@@ -302,17 +306,13 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
     }
 
     public class AlarmHolder extends BaseHolder {
-        private TextView tvTime;
-        private ImageView ivExpand;
+        private TextView tvTime, tvRingFile, tvSound, tvDelete, tvNextTime;
         private EditText edContent;
         private Switch mSwitch;
-        private LinearLayout lnExpand, lnDay;
-        private TextView tvRingFile;
-        private TextView tvSound;
-        private TextView tvDelete;
+        private LinearLayout lnExpand, lnDay, lnItem;
         private AestheticCheckBoxView cbRepeat;
-        private TextView tvNextTime;
-        private ImageView ivNextTime;
+        private ImageView ivExpand, ivNextTime, ivSound, ivLabel, ivDelete;
+        private CheckBox cbVibrate;
 
         AlarmHolder(View itemView) {
             super(itemView);
@@ -325,38 +325,26 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
             });
         }
 
-        @Override
-        protected void onClickView(int idView) {
-            switch (idView) {
-                case R.id.tv_m002_view_set_alarm:
-                case R.id.iv_m002_item_expand:
-                case R.id.tv_m002_item_file:
-                case R.id.tv_m002_item_delete:
-                    break;
-            }
-        }
-
         @SuppressLint("ResourceType")
         @Override
         protected void initView() {
-            tvTime = findViewById(R.id.tv_m002_view_set_alarm, this);
-            tvNextTime = findViewById(R.id.nextTime);
-            mSwitch = findViewById(R.id.s_m002_item_alarm, this);
-
+            lnItem = findViewById(R.id.ln_m002_item_view);
+            tvTime = findViewById(R.id.tv_m002_view_set_alarm, Alarmup.getInstance().getBoldFont());
+            tvNextTime = findViewById(R.id.nextTime, Alarmup.getInstance().getRegularFont());
+            mSwitch = findViewById(R.id.s_m002_item_alarm);
             ivNextTime = findViewById(R.id.iv_m002_item_next_time);
-            findViewById(R.id.iv_m002_item_sound);
-            findViewById(R.id.iv_m002_item_label);
-            findViewById(R.id.iv_m002_item_delete);
-
-            tvSound = findViewById(R.id.tv_m002_item_sound);
-            tvRingFile = findViewById(R.id.tv_m002_item_file);
-
-            tvDelete = findViewById(R.id.tv_m002_item_delete, this);
-            ivExpand = findViewById(R.id.iv_m002_item_expand, this);
-            edContent = findViewById(R.id.ed_m002_item_content);
-            lnExpand = findViewById(R.id.ln_m002_view_expand, this);
-            lnDay = findViewById(R.id.days, this);
-            cbRepeat = findViewById(R.id.repeat, this);
+            ivSound = findViewById(R.id.iv_m002_item_sound);
+            ivLabel = findViewById(R.id.iv_m002_item_label);
+            ivDelete = findViewById(R.id.iv_m002_item_delete);
+            cbVibrate = findViewById(R.id.cb_m002_item_vibrate);
+            tvSound = findViewById(R.id.tv_m002_item_sound, Alarmup.getInstance().getRegularFont());
+            tvRingFile = findViewById(R.id.tv_m002_item_file, Alarmup.getInstance().getBoldFont());
+            tvDelete = findViewById(R.id.tv_m002_item_delete, Alarmup.getInstance().getRegularFont());
+            ivExpand = findViewById(R.id.iv_m002_item_expand);
+            edContent = findViewById(R.id.ed_m002_item_content, Alarmup.getInstance().getBoldFont());
+            lnExpand = findViewById(R.id.ln_m002_view_expand);
+            lnDay = findViewById(R.id.days);
+            cbRepeat = findViewById(R.id.repeat);
         }
     }
 }

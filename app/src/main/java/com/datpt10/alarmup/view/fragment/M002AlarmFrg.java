@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.aesthetic.Aesthetic;
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.base.BaseFragment;
 import com.datpt10.alarmup.model.AlarmEntity;
@@ -29,7 +29,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * create by datpt on 10/24/2019.
  */
-public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePageCallBack> implements OnM002AlarmCallBack, Alarmio.AlarmListener {
+public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePageCallBack> implements OnM002AlarmCallBack, Alarmup.AlarmListener {
     public static final String TAG = M002AlarmFrg.class.getName();
     private AlarmAdapter alarmAdapter;
     private RecyclerView recyclerAlarm;
@@ -43,15 +43,14 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
     @Override
     protected void initViews() {
         recyclerAlarm = findViewById(R.id.rl_m002_list_alarm);
-        empty = findViewById(R.id.empty);
-        emptyText = findViewById(R.id.emptyText);
         findViewById(R.id.ig_m002_add_alarm, this);
+        empty = findViewById(R.id.empty);
+        emptyText = findViewById(R.id.emptyText, Alarmup.getInstance().getRegularFont());
         emptyText.setText(R.string.txt_alarm_empty_text);
-
         recyclerAlarm.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         recyclerAlarm.setHasFixedSize(true);
         recyclerAlarm.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-        alarmAdapter = new AlarmAdapter(mContext, getAlarmList(), this, recyclerAlarm, getAlarmio());
+        alarmAdapter = new AlarmAdapter(mContext, getAlarmList(), this, recyclerAlarm, getAlarmup());
         recyclerAlarm.setAdapter(alarmAdapter);
 
         colorAccentSubscription = Aesthetic.Companion.get()
@@ -123,7 +122,7 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
             noteCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
             noteCal.set(Calendar.MINUTE, minute);
             AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-            AlarmEntity alarm = getAlarmio().newAlarm();
+            AlarmEntity alarm = getAlarmup().newAlarm();
             alarm.setTime(mContext, manager, noteCal.getTimeInMillis());
             alarm.setEnabled(mContext, manager, true);
             initViews();
@@ -137,8 +136,8 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
 
     @Override
     public void removeAlarm(AlarmEntity alarmEntity) {
-        assert getAlarmio() != null;
-        getAlarmio().removeAlarm(alarmEntity);
+        assert getAlarmup() != null;
+        getAlarmup().removeAlarm(alarmEntity);
     }
 
 }

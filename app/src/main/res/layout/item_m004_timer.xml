@@ -57,15 +57,16 @@
                         android:hint="@string/txt_timer_label"
                         android:inputType="textCapWords|textAutoComplete|textAutoCorrect"
                         android:lines="1"
-                        android:paddingLeft="@dimen/d_5"
                         android:maxLines="1"
+                        android:paddingLeft="@dimen/d_5"
                         android:paddingTop="4dp"
                         android:paddingBottom="4dp"
                         android:singleLine="true"
                         android:textColor="@color/colorWhite"
                         android:textColorHint="@color/colorGraySuperLight"
                         android:textCursorDrawable="@null"
-                        android:textSize="@dimen/d_17" />
+                        android:textSize="@dimen/d_18"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/iv_m004_item_delete"
@@ -81,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/d_10"
-                    android:text="00 : 00 : 00"
+                    android:text="@string/txt_m004_item_00_00_00"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/d_25"
                     android:textStyle="bold" />

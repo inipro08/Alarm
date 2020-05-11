@@ -6,7 +6,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 import com.google.android.exoplayer2.C;
 
 import io.reactivex.annotations.Nullable;
@@ -14,7 +14,6 @@ import io.reactivex.annotations.Nullable;
 public class SoundEntity {
     public static final String SEPARATOR = ":AlarmioSoundData:";
     public static final String TYPE_RINGTONE = "ringtone";
-    private static final String TYPE_RADIO = "radio";
     private String name;
     private String type;
     private String url;
@@ -68,21 +67,21 @@ public class SoundEntity {
      * [Alarmio](../Alarmio) class, which will store the currently playing sound
      * until it is stopped or cancelled.
      *
-     * @param alarmio The active Application instance.
+     * @param alarmup The active Application instance.
      */
-    public void play(Alarmio alarmio) {
+    public void play(Alarmup alarmup) {
         if (type.equals(TYPE_RINGTONE) && url.startsWith("content://")) {
             if (ringtone == null) {
-                ringtone = RingtoneManager.getRingtone(alarmio, Uri.parse(url));
+                ringtone = RingtoneManager.getRingtone(alarmup, Uri.parse(url));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ringtone.setAudioAttributes(new AudioAttributes.Builder()
                             .setUsage(AudioAttributes.USAGE_ALARM)
                             .build());
                 }
             }
-            alarmio.playRingtone(ringtone);
+            alarmup.playRingtone(ringtone);
         } else {
-            alarmio.playStream(url, type,
+            alarmup.playStream(url, type,
                     new com.google.android.exoplayer2.audio.AudioAttributes.Builder()
                             .setUsage(C.USAGE_ALARM)
                             .build());
@@ -94,23 +93,23 @@ public class SoundEntity {
      * if the sound is a ringtone; if it is a stream, then all streams will be stopped,
      * regardless of whether this sound is in fact the currently playing stream or not.
      *
-     * @param alarmio The active Application instance.
+     * @param alarmup The active Application instance.
      */
-    public void stop(Alarmio alarmio) {
+    public void stop(Alarmup alarmup) {
         if (ringtone != null)
             ringtone.stop();
-        else alarmio.stopStream();
+        else alarmup.stopStream();
     }
 
     /**
      * Preview the sound on the "media" volume channel.
      *
-     * @param alarmio The active Application instance.
+     * @param alarmup The active Application instance.
      */
-    public void preview(Alarmio alarmio) {
+    public void preview(Alarmup alarmup) {
         if (url.startsWith("content://")) {
             if (ringtone == null) {
-                ringtone = RingtoneManager.getRingtone(alarmio, Uri.parse(url));
+                ringtone = RingtoneManager.getRingtone(alarmup, Uri.parse(url));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ringtone.setAudioAttributes(new AudioAttributes.Builder()
                             .setUsage(AudioAttributes.USAGE_ALARM)
@@ -118,9 +117,9 @@ public class SoundEntity {
                 }
             }
 
-            alarmio.playRingtone(ringtone);
+            alarmup.playRingtone(ringtone);
         } else {
-            alarmio.playStream(url, type,
+            alarmup.playStream(url, type,
                     new com.google.android.exoplayer2.audio.AudioAttributes.Builder()
                             .setUsage(C.USAGE_ALARM)
                             .build());
@@ -130,13 +129,13 @@ public class SoundEntity {
     /**
      * Decide whether the sound is currently playing or not.
      *
-     * @param alarmio The active Application instance.
+     * @param alarmup The active Application instance.
      * @return True if "this" sound is playing.
      */
-    public boolean isPlaying(Alarmio alarmio) {
+    public boolean isPlaying(Alarmup alarmup) {
         if (ringtone != null)
             return ringtone.isPlaying();
-        else return alarmio.isPlayingStream(url);
+        else return alarmup.isPlayingStream(url);
     }
 
     /**

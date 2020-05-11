@@ -3,7 +3,7 @@ package com.datpt10.alarmup.presenter;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.datpt10.alarmup.ANApplication;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.util.CommonUtil;
 import com.datpt10.alarmup.util.StorageCommon;
 import com.datpt10.alarmup.view.event.OnCallBackToView;
@@ -30,12 +30,12 @@ public abstract class BasePresenter<T extends OnCallBackToView> {
     }
 
     protected final void showNotify(int text) {
-        Toast.makeText(ANApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Alarmup.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 
     protected final void showNotify(String text) {
         if (text == null) return;
-        Toast.makeText(ANApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Alarmup.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -50,7 +50,7 @@ public abstract class BasePresenter<T extends OnCallBackToView> {
 
 
     public final StorageCommon getStorage() {
-        return ANApplication.getInstance().getStorageCommon();
+        return Alarmup.getInstance().getStorageCommonAlarmUp();
     }
 
     String generateJson(String body, Object... data) {

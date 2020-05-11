@@ -22,8 +22,21 @@
             app:fab_menuMargins="16dp"
             app:fab_moreButtonBackgroundColor="@color/colorAccent"
             app:fab_moreButtonPlusIcon="@drawable/ic_add_circle"
-            app:fab_moreButtonRippleColor="?colorPrimary"
+            app:fab_moreButtonRippleColor="@color/colorAccent"
             app:fab_moreButtonSize="normal">
+
+            <jahirfiquitiva.libs.fabsmenu.TitleFAB
+                android:id="@+id/tv_m001_bottom_bar_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/colorAccent"
+                app:fabSize="mini"
+                app:fab_title="@string/txt_bottom_bar_settings"
+                app:fab_title_backgroundColor="@android:color/transparent"
+                app:fab_title_textColor="@color/colorWhite"
+                app:rippleColor="@color/colorAccent"
+                app:srcCompat="@drawable/ic_settings"
+                tools:ignore="VectorDrawableCompat" />
 
             <jahirfiquitiva.libs.fabsmenu.TitleFAB
                 android:id="@+id/tv_m001_bottom_bar_timer"
@@ -32,8 +45,10 @@
                 android:textStyle="bold"
                 app:backgroundTint="@color/colorAccent"
                 app:fabSize="mini"
-                app:fab_title="Timer"
-                app:rippleColor="?colorPrimary"
+                app:fab_title="@string/txt_bottom_bar_timer"
+                app:fab_title_backgroundColor="@android:color/transparent"
+                app:fab_title_textColor="@color/colorWhite"
+                app:rippleColor="@color/colorAccent"
                 app:srcCompat="@drawable/ic_timer"
                 tools:ignore="VectorDrawableCompat" />
 
@@ -43,8 +58,10 @@
                 android:layout_height="wrap_content"
                 app:backgroundTint="@color/colorAccent"
                 app:fabSize="mini"
-                app:fab_title="Time Zone"
-                app:rippleColor="?colorPrimary"
+                app:fab_title="@string/txt_bottom_bar_timezone"
+                app:fab_title_backgroundColor="@android:color/transparent"
+                app:fab_title_textColor="@color/colorWhite"
+                app:rippleColor="@color/colorAccent"
                 app:srcCompat="@drawable/ic_time_zone" />
 
             <jahirfiquitiva.libs.fabsmenu.TitleFAB
@@ -53,8 +70,10 @@
                 android:layout_height="wrap_content"
                 app:backgroundTint="@color/colorAccent"
                 app:fabSize="mini"
-                app:fab_title="Alarm"
-                app:rippleColor="?colorPrimary"
+                app:fab_title="@string/txt_bottom_bar_alarm"
+                app:fab_title_backgroundColor="@android:color/transparent"
+                app:fab_title_textColor="@color/colorWhite"
+                app:rippleColor="@color/colorAccent"
                 app:srcCompat="@drawable/ic_alarm"
                 tools:ignore="VectorDrawableCompat" />
 

@@ -38,7 +38,7 @@ public class TimerEntity implements Parcelable {
         duration = PreferenceEntity.TIMER_DURATION.getSpecificValue(context, id);
     }
 
-    protected TimerEntity(Parcel in) {
+    private TimerEntity(Parcel in) {
         id = in.readInt();
         labelTimer = in.readString();
         time = in.readLong();
@@ -55,7 +55,6 @@ public class TimerEntity implements Parcelable {
         PreferenceEntity.TIMER_LABEL.setValue(context, labelTimer, id);
         PreferenceEntity.TIMER_SET_TIME.setValue(context, time, id);
         PreferenceEntity.TIMER_DURATION.setValue(context, duration, id);
-//        onRemoved(context);
         this.id = id;
     }
 
@@ -69,6 +68,10 @@ public class TimerEntity implements Parcelable {
         PreferenceEntity.TIMER_LABEL.setValue(context, null, id);
         PreferenceEntity.TIMER_SET_TIME.setValue(context, null, id);
         PreferenceEntity.TIMER_DURATION.setValue(context, null, id);
+    }
+
+    public int getId() {
+        return id;
     }
 
     /**
@@ -87,7 +90,7 @@ public class TimerEntity implements Parcelable {
      * @return The amount of milliseconds before the timer should go off.
      */
     public long getRemainingMillis() {
-        return time;
+        return Math.max(time - System.currentTimeMillis(), 0);
     }
 
     public long getDuration() {
@@ -109,7 +112,7 @@ public class TimerEntity implements Parcelable {
      * @param content The total length of the timer, in milliseconds.
      * @param context An active Context instance.
      */
-    public void setContentTimer(String content, Context context) {
+    public void setContentTimer(Context context, String content) {
         this.labelTimer = content;
         PreferenceEntity.TIMER_LABEL.setValue(context, content, id);
     }
@@ -117,10 +120,12 @@ public class TimerEntity implements Parcelable {
     /**
      * Set the next time for the timer to ring.
      *
-     * @param context An active context instance.
+     * @param context      An active context instance.
+     * @param alarmManager
      */
-    public void set(Context context, long millis) {
+    public void set(Context context, AlarmManager alarmManager, long millis) {
         time = millis;
+        setTimer(context, alarmManager);
         PreferenceEntity.TIMER_SET_TIME.setValue(context, time, id);
     }
 
@@ -140,10 +145,10 @@ public class TimerEntity implements Parcelable {
      * @param context An active context instance.
      * @param manager The AlarmManager to schedule the alert on.
      */
-    public void setAlarm(Context context, AlarmManager manager) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    private void setTimer(Context context, AlarmManager manager) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             manager.setExact(AlarmManager.RTC_WAKEUP, time, getIntent(context));
-        }
+        else manager.set(AlarmManager.RTC_WAKEUP, time, getIntent(context));
     }
 
     /**
@@ -179,7 +184,7 @@ public class TimerEntity implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(labelTimer);
-        parcel.writeLong( time);
-        parcel.writeLong( duration);
+        parcel.writeLong(time);
+        parcel.writeLong(duration);
     }
 }

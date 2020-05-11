@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ln_m002_item_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -9,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:id="@+id/tr_m002_detail_alarm"
@@ -28,9 +30,9 @@
                     android:id="@+id/tv_m002_view_set_alarm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="06 : 56"
+                    android:text="@string/txt_06_56"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/d_30"
+                    android:textSize="@dimen/d_32"
                     android:textStyle="bold" />
 
                 <View
@@ -41,8 +43,7 @@
                 <Switch
                     android:id="@+id/s_m002_item_alarm"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <TableRow
@@ -69,7 +70,7 @@
                     android:layout_marginTop="@dimen/d_5"
                     android:layout_marginBottom="6dp"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/d_14"
+                    android:textSize="@dimen/d_16"
                     tools:text="Next alarm: 14:00 Friday, January 26" />
             </TableRow>
         </LinearLayout>
@@ -96,9 +97,9 @@
                     android:layout_marginEnd="@dimen/d_10"
                     android:layout_marginRight="@dimen/d_10"
                     android:gravity="center_vertical"
-                    android:text="Repeat"
+                    android:text="@string/txt_repeat"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/d_14" />
+                    android:textSize="@dimen/d_16" />
 
                 <LinearLayout
                     android:id="@+id/days"
@@ -146,13 +147,13 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
 
                 <ImageView
                     android:id="@+id/iv_m002_item_sound"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/d_4"
                     android:layout_marginLeft="@dimen/d_4"
                     android:layout_marginEnd="@dimen/d_12"
@@ -164,22 +165,34 @@
                     android:id="@+id/tv_m002_item_sound"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="Sound"
+                    android:text="@string/txt_m002_item_sound"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/d_15" />
+                    android:textSize="@dimen/d_17" />
 
                 <TextView
                     android:id="@+id/tv_m002_item_file"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/d_8"
-                    android:gravity="center_vertical"
-                    android:text="@string/txt_ring_default"
+                    android:layout_marginEnd="@dimen/d_5"
+                    android:layout_marginRight="@dimen/d_5"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/d_15"
+                    android:textSize="@dimen/d_17"
                     android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/cb_m002_item_vibrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d_7"
+                    android:layout_marginLeft="@dimen/d_7"
+                    android:buttonTint="@color/colorWhite"
+                    android:text="@string/txt_m002_item_vibrate"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/d_17"
+                    android:textStyle="bold"
+                    tools:targetApi="lollipop" />
             </TableRow>
 
             <TableRow
@@ -192,7 +205,9 @@
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/d_4"
                     android:layout_marginLeft="@dimen/d_4"
+                    android:layout_marginEnd="@dimen/d_12"
                     android:layout_marginRight="@dimen/d_12"
                     android:src="@drawable/ic_label"
                     android:tint="@color/colorWhite" />
@@ -203,7 +218,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:textStyle="bold"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:hint="@string/txt_alarm_label"
@@ -211,12 +225,14 @@
                     android:lines="1"
                     android:maxLines="1"
                     android:paddingVertical="@dimen/d_4"
+                    android:paddingStart="@dimen/d_5"
                     android:paddingLeft="@dimen/d_5"
                     android:singleLine="true"
                     android:textColor="@color/colorWhite"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/d_16"
-                    android:paddingStart="@dimen/d_5" />
+                    android:textSize="@dimen/d_17"
+                    android:textStyle="bold"
+                    tools:ignore="RtlSymmetry" />
             </TableRow>
         </LinearLayout>
 
@@ -244,7 +260,7 @@
                 android:layout_marginRight="@dimen/d_5"
                 android:text="Delete"
                 android:textColor="@color/colorWhite"
-                android:textSize="@dimen/d_15" />
+                android:textSize="@dimen/d_17" />
 
             <View
                 android:layout_width="0dp"

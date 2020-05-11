@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.TimerEntity;
 import com.datpt10.alarmup.view.event.OnM004TimerCallBack;
@@ -32,19 +33,18 @@ import java.util.TimerTask;
 public class TimerAdapter extends ArrayAdapter<TimerEntity> {
     private static final String TAG = TimerAdapter.class.getName();
     private final List<TimeHolder> lstHolders;
+    private OnM004TimerCallBack timerCallBack;
     private String[] mColors = {"#42CDCA", "#4fa6d3", "#4879af", "#63539e", "#5e4270"};
     private List<TimerEntity> listTimerEntity;
     private LayoutInflater inflater;
     private ListView lvTimer;
-    private OnM004TimerCallBack timerCallBack;
     private Handler mHandler = new Handler();
     private Runnable updateRemainingTimeRunnable = new Runnable() {
         @Override
         public void run() {
             synchronized (lstHolders) {
-                long currentTime = System.currentTimeMillis();
                 for (TimeHolder holder : lstHolders) {
-                    holder.updateTimeRemaining(currentTime);
+                    holder.updateTimeRemaining();
                 }
             }
         }
@@ -78,7 +78,9 @@ public class TimerAdapter extends ArrayAdapter<TimerEntity> {
             holder = new TimeHolder();
             convertView = inflater.inflate(R.layout.item_m004_timer, parent, false);
             holder.edContentTimer = convertView.findViewById(R.id.ed_m004_item_label);
+            holder.edContentTimer.setTypeface(Alarmup.getInstance().getBoldFont());
             holder.tvTimer = convertView.findViewById(R.id.tv_m004_item_count_downn);
+            holder.tvTimer.setTypeface(Alarmup.getInstance().getBoldFont());
             holder.progressBarTimer = convertView.findViewById(R.id.progressBar);
             holder.ivDelete = convertView.findViewById(R.id.iv_m004_item_delete);
             holder.cardView = convertView.findViewById(R.id.cardViewTimer);
@@ -97,16 +99,16 @@ public class TimerAdapter extends ArrayAdapter<TimerEntity> {
         TimeHolder finalHolder = holder;
         holder.edContentTimer.addTextChangedListener(new TextAdapter() {
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable editable) {
                 finalHolder.edContentTimer.setBackgroundColor(getContext().getResources().getColor(R.color.colorBgEditText));
-                listTimerEntity.get(position).setContentTimer(s.toString(), getContext());
+                listTimerEntity.get(position).setContentTimer(getContext(), editable.toString());
             }
         });
         holder.setData(listTimerEntity.get(position));
         return convertView;
     }
 
-    static class TimeHolder {
+    private static class TimeHolder {
         EditText edContentTimer;
         TextView tvTimer;
         ImageView ivDelete;
@@ -117,29 +119,22 @@ public class TimerAdapter extends ArrayAdapter<TimerEntity> {
         void setData(TimerEntity item) {
             timerEntity = item;
             edContentTimer.setText(item.getContentTimer());
-            updateTimeRemaining(System.currentTimeMillis());
+            updateTimeRemaining();
         }
 
-        void updateTimeRemaining(long currentTime) {
+        void updateTimeRemaining() {
             progressBarTimer.setMax((int) timerEntity.getDuration());
-            long timeDiff = timerEntity.getRemainingMillis() - currentTime;
+            long timeDiff = timerEntity.getRemainingMillis();
             if (timeDiff > 0) {
                 int seconds = (int) (timeDiff / 1000) % 60;
                 int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
                 int hours = (int) ((timeDiff / (1000 * 60 * 60)) % 24);
 
-                progressBarTimer.setProgress((int) timeDiff);
-                String timeLeftFormatted = null;
-                if (hours > 0) {
-                    timeLeftFormatted = String.format(Locale.getDefault(), "%02d : %02d : %02d", hours, minutes, seconds);
-                } else if (minutes > 0) {
-                    timeLeftFormatted = String.format(Locale.getDefault(), "%02d : %02d", minutes, seconds);
-                } else if (seconds > 0) {
-                    timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
-                }
+                progressBarTimer.setProgress((int) timeDiff - 670);
+                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d : %02d : %02d", hours, minutes, seconds);
                 tvTimer.setText(timeLeftFormatted);
             } else {
-                tvTimer.setText("Done");
+                tvTimer.setText("00 : 00 : 00");
             }
         }
     }

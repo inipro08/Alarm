@@ -91,4 +91,36 @@
     <color name="colorIndeterminateText">#606060</color>
     <color name="color_bg_app">#222222</color>
 
+
+    <color name="colorStatusBarDefault">#222831</color>
+    <color name="colorPrimaryDarkDefault">#222831</color>
+    <color name="colorWindowBackgroundDefault">#393e46</color>
+    <color name="colorNavigationBarDefault">#222831</color>
+    <color name="colorPrimaryDefault">#393e46</color>
+    <color name="colorAccentDefault">#00adb5</color>
+
+
+    <color name="colorStatusBarOne">#1d3e53</color>
+    <color name="colorPrimaryDarkOne">#1d3e53</color>
+    <color name="colorWindowBackgroundOne">#254b62</color>
+    <color name="colorNavigationBarOne">#1d3e53</color>
+    <color name="colorPrimaryOne">#476d7c</color>
+    <color name="colorAccentOne">#77abb7</color>
+
+
+    <color name="colorStatusBarTwo">#282d4f</color>
+    <color name="colorPrimaryDarkTwo">#282d4f</color>
+    <color name="colorWindowBackgroundTwo">#415b90</color>
+    <color name="colorNavigationBarTwo">#282d4f</color>
+    <color name="colorPrimaryTwo">#ff6c00</color>
+    <color name="colorAccentTwo">#2ca4bf</color>
+
+
+    <color name="colorStatusBarThree">#222831</color>
+    <color name="colorPrimaryDarkThree">#222831</color>
+    <color name="colorWindowBackgroundThree">#2d4059</color>
+    <color name="colorNavigationBarThree">#222831</color>
+    <color name="colorPrimaryThree">#ff5722</color>
+    <color name="colorAccentThree">#eeeeee</color>
+
 </resources>

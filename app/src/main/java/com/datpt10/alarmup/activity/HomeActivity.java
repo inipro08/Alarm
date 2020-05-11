@@ -7,10 +7,11 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.base.BaseActivity;
 import com.datpt10.alarmup.base.BaseFragment;
+import com.datpt10.alarmup.model.TimerEntity;
 import com.datpt10.alarmup.presenter.HomePresenter;
 import com.datpt10.alarmup.util.CommonUtil;
 import com.datpt10.alarmup.view.event.OnHomeBackToView;
@@ -22,10 +23,12 @@ import java.util.HashMap;
 
 public class HomeActivity extends BaseActivity<HomePresenter> implements OnHomeBackToView, OnLanguageCallBack {
     public static final String TAG = HomeActivity.class.getName();
+    public static final String EXTRA_TIMER = "EXTRA_TIMER";
+    public static final String TIMER_ID = "TIMER_ID";
     private static final String ALREADY_VALUE = "YES";
     private final HashMap<String, BaseFragment> mFrags = new HashMap<>();
     private AlertDialog mAlertDialog;
-    private Alarmio alarmio;
+    private Alarmup alarmup;
 
     @Override
     protected int getLayoutId() {
@@ -35,13 +38,22 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements OnHomeB
     @Override
     protected void initViews() {
         Log.d(TAG, "initViews...");
+        Intent intent = this.getIntent();
+        if (getIntent().hasExtra(EXTRA_TIMER)) {
+            TimerEntity timerEntity = getIntent().getParcelableExtra(EXTRA_TIMER);
+            int duration = (int) timerEntity.getDuration();
+            int idEntity = timerEntity.getId();
+            CommonUtil.getInstance().savePrefContent(EXTRA_TIMER, duration);
+            CommonUtil.getInstance().savePrefContent(TIMER_ID, idEntity);
+        }
+        String timerFrg = intent.getStringExtra("EXTRA_TIMER_IN");
+        CommonUtil.getInstance().savePrefContent("TIMER_EXTRA", timerFrg);
         showFrgScreen(TAG, M001HomePageFrg.TAG);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
     }
 
     @Override
@@ -89,7 +101,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements OnHomeB
             try {
                 getFragmentManager().beginTransaction()
                         .setCustomAnimations(R.animator.alpha_in, R.animator.alpha_out)
-                        .replace(R.id.question_content, frg).commit();
+                        .replace(R.id.content, frg).commit();
             } catch (Exception ignore) {
                 ignore.printStackTrace();
             }

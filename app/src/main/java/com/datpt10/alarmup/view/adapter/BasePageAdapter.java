@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.datpt10.alarmup.ANApplication;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.util.CommonUtil;
 import com.datpt10.alarmup.util.StorageCommon;
 import com.datpt10.alarmup.view.event.OnCallBackToView;
@@ -33,11 +33,11 @@ public abstract class BasePageAdapter<T extends OnCallBackToView, G> extends Pag
     }
 
     public void showNotify(int text) {
-        Toast.makeText(ANApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Alarmup.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 
     public void showNotify(String text) {
-        Toast.makeText(ANApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Alarmup.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -99,6 +99,6 @@ public abstract class BasePageAdapter<T extends OnCallBackToView, G> extends Pag
     }
 
     public final StorageCommon getStorage() {
-        return ANApplication.getInstance().getStorageCommon();
+        return Alarmup.getInstance().getStorageCommonAlarmUp();
     }
 }

@@ -1,28 +1,33 @@
 package com.datpt10.alarmup.base;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.afollestad.aesthetic.Aesthetic;
-import com.datpt10.alarmup.ANApplication;
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.presenter.BasePresenter;
 import com.datpt10.alarmup.util.StorageCommon;
 
-public abstract class BaseActivity<T extends BasePresenter> extends Activity implements Alarmio.ActivityListener {
+public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements Alarmup.ActivityListener {
 
     protected static final int NO_LAYOUT = -1;
     private static final String TAG = BaseActivity.class.getName();
     public transient String currentTag;
     protected T mPresenter;
     protected boolean isDestroyed;
-    private Alarmio alarmio;
+    private Alarmup alarmup;
+
+    private int STORAGE_PERMISSION_CODE = 1;
 
     protected abstract int getLayoutId();
 
@@ -43,7 +48,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends Activity imp
     }
 
     protected void showNotify(String text) {
-        Toast.makeText(ANApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Alarmup.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -59,9 +64,15 @@ public abstract class BaseActivity<T extends BasePresenter> extends Activity imp
             setContentView(layoutId);
         }
         mPresenter = getPresenter();
-        alarmio = (Alarmio) getApplicationContext();
-        alarmio.setListener(this);
+        alarmup = (Alarmup) getApplicationContext();
+        alarmup.setListener(this);
         initViews();
+        getSupportActionBar().hide();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
     }
 
     @Override
@@ -80,11 +91,10 @@ public abstract class BaseActivity<T extends BasePresenter> extends Activity imp
     public final void onPause() {
         Aesthetic.Companion.pause(this);
         super.onPause();
-        alarmio.stopCurrentSound();
+        alarmup.stopCurrentSound();
     }
 
     protected void onClickView(int idView) {
-
     }
 
     @Override
@@ -93,15 +103,14 @@ public abstract class BaseActivity<T extends BasePresenter> extends Activity imp
         handleOnDestroy();
         super.onDestroy();
         currentTag = null;
-        if (alarmio != null)
-            alarmio.setListener(null);
-        alarmio = null;
+//        if (alarmup != null)
+//            alarmup.setListener(null);
+//        alarmup = null;
     }
 
     public StorageCommon getStorage() {
-        return ANApplication.getInstance().getStorageCommon();
+        return Alarmup.getInstance().getStorageCommonAlarmUp();
     }
-
 
     public void setTagCurrentFrg(String tag) {
         currentTag = tag;
@@ -114,7 +123,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends Activity imp
 
     @Override
     public void requestPermissions(String... permissions) {
-
     }
 
     @Override

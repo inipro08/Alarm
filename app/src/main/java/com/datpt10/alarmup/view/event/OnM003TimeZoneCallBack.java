@@ -5,4 +5,6 @@ package com.datpt10.alarmup.view.event;
  */
 public interface OnM003TimeZoneCallBack extends OnCallBackToView {
     void changedView();
+
+    void addTimeZone(String text);
 }

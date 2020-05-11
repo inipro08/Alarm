@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_bg_app"
     android:orientation="vertical">
 
     <FrameLayout
@@ -64,8 +63,8 @@
 
         <ImageButton
             android:id="@+id/ig_m002_add_alarm"
-            android:layout_width="@dimen/d_48"
-            android:layout_height="@dimen/d_48"
+            android:layout_width="@dimen/d_60"
+            android:layout_height="@dimen/d_60"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="@dimen/d_20"
             android:background="@android:color/transparent"

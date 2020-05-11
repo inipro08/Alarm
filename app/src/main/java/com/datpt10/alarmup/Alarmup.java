@@ -1,31 +1,36 @@
 package com.datpt10.alarmup;
 
-import android.Manifest;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Criteria;
-import android.location.LocationManager;
+import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.afollestad.aesthetic.Aesthetic;
 import com.afollestad.aesthetic.AutoSwitchMode;
+import com.datpt10.alarmup.activity.AlarmActivity;
 import com.datpt10.alarmup.model.AlarmEntity;
 import com.datpt10.alarmup.model.PreferenceEntity;
 import com.datpt10.alarmup.model.SoundEntity;
 import com.datpt10.alarmup.model.TimerEntity;
+import com.datpt10.alarmup.service.AlarmService;
 import com.datpt10.alarmup.service.SleepReminderService;
-import com.datpt10.alarmup.service.TimerService;
+import com.datpt10.alarmup.util.StorageCommon;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -39,22 +44,24 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.gms.ads.MobileAds;
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
-import com.luckycatlabs.sunrisesunset.dto.Location;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
-public class Alarmio extends Application implements Player.EventListener {
-    public static final int THEME_DAY_NIGHT = 0;
-    public static final int THEME_DAY = 1;
-    public static final int THEME_NIGHT = 2;
-    public static final int THEME_AMOLED = 3;
+public class Alarmup extends Application implements Player.EventListener {
+    public static final int THEME_DEFAULT = 0;
+    public static final int THEME_ONE = 1;
+    public static final int THEME_TWO = 2;
+    public static final int THEME_THREE = 3;
 
     public static final String NOTIFICATION_CHANNEL_TIMERS = "timers";
-    private static final String TAG = Alarmio.class.getName();
+    private static final String TAG = Alarmup.class.getName();
+    private static final String CHANNEL_ID = "CHANNEL_ID";
+    private static Alarmup instance;
     private SharedPreferences prefs;
     private SunriseSunsetCalculator sunsetCalculator;
     private Ringtone currentRingtone;
@@ -65,19 +72,122 @@ public class Alarmio extends Application implements Player.EventListener {
     private SimpleExoPlayer player;
     private HlsMediaSource.Factory hlsMediaSourceFactory;
     private String currentStream;
+    private StorageCommon storageCommon;
+    private Typeface mBoldFont;
+    private Typeface mRegularFont;
+    private Typeface mItalicFont;
+    private Typeface mBoldItalicFont;
+
+    private String vibrate;
+    private SoundEntity sound;
+    private Vibrator vibrator;
+    private Handler handler;
+    private Runnable runnable;
+    private AudioManager audioManager;
+    private int currentVolume;
+    private int minVolume;
+    private int originalVolume;
+    private int volumeRange;
+    private boolean isSlowWake;
+    private long slowWakeMillis;
+
+    public Alarmup() {
+        if (instance == null) {
+            instance = this;
+        }
+    }
+
+    public static Alarmup getInstance() {
+        return instance;
+    }
+
+    public void showNotification(AlarmEntity alarmEntity) {
+        Log.i("Alarmup", "shownotification");
+        WakeLocker.acquire(getApplicationContext());
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        isSlowWake = PreferenceEntity.SLOW_WAKE_UP.getValue(this);
+        slowWakeMillis = PreferenceEntity.SLOW_WAKE_UP_TIME.getValue(this);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        assert audioManager != null;
+        originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+        if (isSlowWake) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                minVolume = audioManager.getStreamMinVolume(AudioManager.STREAM_ALARM);
+            } else {
+                minVolume = 0;
+            }
+            volumeRange = originalVolume - minVolume;
+            currentVolume = minVolume;
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, minVolume, 0);
+        }
+        long elapsedMillis = System.currentTimeMillis() - System.currentTimeMillis();
+        assert alarmEntity != null;
+        vibrate = alarmEntity.getVibrate(getApplicationContext());
+        sound = alarmEntity.getSoundAlarm();
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (vibrate.equalsIgnoreCase("Vibrate") && sound != null) {
+                    sound.play(instance);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                        vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                    else vibrator.vibrate(500);
+                } else {
+                    assert sound != null;
+                    sound.play(instance);
+                }
+                if (isSlowWake) {
+                    float slowWakeProgress = (float) elapsedMillis / slowWakeMillis;
+                    if (currentVolume < originalVolume) {
+                        int newVolume = minVolume + (int) Math.min(originalVolume, slowWakeProgress * volumeRange);
+                        if (newVolume != currentVolume) {
+                            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, newVolume, 0);
+                            currentVolume = newVolume;
+                        }
+                    }
+                }
+                handler.postDelayed(this, 1000);
+            }
+        };
+        handler.post(runnable);
+        if (sound != null)
+            sound.play(instance);
+
+        Intent startAlarmService = new Intent(getApplicationContext(), AlarmService.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AlarmActivity.EXTRA_ALARM, alarmEntity);
+        startAlarmService.putExtras(bundle);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getApplicationContext().startForegroundService(startAlarmService);
+        }
+        WakeLocker.release();
+    }
+
+    public void stopAnnoyances() {
+        if (handler != null) handler.removeCallbacks(runnable);
+        if (sound.isPlaying(this)) {
+            sound.stop(this);
+            if (isSlowWake) {
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, originalVolume, 0);
+            }
+        }
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        DebugUtils.setup(this);
         Log.i(TAG, "Alarmio---");
         listeners = new ArrayList<>();
         alarms = new ArrayList<>();
         timers = new ArrayList<>();
 
+        MobileAds.initialize(this, "ca-app-pub-1636422389316045/4010716135");
+
         player = ExoPlayerFactory.newSimpleInstance(this, new DefaultTrackSelector());
         player.addListener(this);
+        storageCommon = new StorageCommon(new WeakReference<>(this));
 
         DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "exoplayer2example"), null);
         hlsMediaSourceFactory = new HlsMediaSource.Factory(dataSourceFactory);
@@ -92,7 +202,35 @@ public class Alarmio extends Application implements Player.EventListener {
             timers.add(new TimerEntity(id, this));
         }
 
+        mBoldFont = Typeface.createFromAsset(getAssets(), "font/Neo Sans Intel-Bold.ttf");
+        mRegularFont = Typeface.createFromAsset(getAssets(), "font/Neo Sans Intel.ttf");
+        mBoldItalicFont = Typeface.createFromAsset(getAssets(), "font/Neo Sans Intel-Bold Italic.ttf");
+        mItalicFont = Typeface.createFromAsset(getAssets(), "font/Neo Sans Intel-Italic.ttf");
+
         SleepReminderService.refreshSleepTime(this);
+    }
+
+    public StorageCommon getStorageCommonAlarmUp() {
+        if (storageCommon == null) {
+            storageCommon = new StorageCommon(new WeakReference<>(this));
+        }
+        return storageCommon;
+    }
+
+    public Typeface getRegularFont() {
+        return mRegularFont;
+    }
+
+    public Typeface getBoldFont() {
+        return mBoldFont;
+    }
+
+    public Typeface getItalicFont() {
+        return mItalicFont;
+    }
+
+    public Typeface getBoldItalicFont() {
+        return mBoldItalicFont;
     }
 
     public List<AlarmEntity> getAlarms() {
@@ -131,10 +269,6 @@ public class Alarmio extends Application implements Player.EventListener {
         }
         onAlarmCountChanged();
         onAlarmsChanged();
-    }
-
-    public void removeAlarmList(AlarmEntity alarmEntity) {
-        alarmEntity.onRemoved(this);
     }
 
     /**
@@ -196,14 +330,6 @@ public class Alarmio extends Application implements Player.EventListener {
         for (AlarmListener listener : listeners) {
             listener.onTimersChanged();
         }
-
-    }
-
-    /**
-     * Starts the timer service after a timer has been set.
-     */
-    public void onTimerStarted() {
-        startService(new Intent(this, TimerService.class));
     }
 
     /**
@@ -220,146 +346,51 @@ public class Alarmio extends Application implements Player.EventListener {
      * Update the application theme.
      */
     public void updateTheme() {
-        if (isNight()) {
+        if (Utility.getTheme(getApplicationContext()) == THEME_DEFAULT) {
             Aesthetic.Companion.get()
-                    .isDark(true)
+                    .isDark(false)
                     .lightStatusBarMode(AutoSwitchMode.OFF)
-                    .colorPrimary(ContextCompat.getColor(this, R.color.colorNightPrimary))
-                    .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorWhite))
-                    .colorStatusBar(ContextCompat.getColor(this, R.color.colorWhite))
-                    .colorNavigationBar(ContextCompat.getColor(this, R.color.colorBlack))
-                    .colorAccent(ContextCompat.getColor(this, R.color.colorNightAccent))
-                    .colorCardViewBackground(ContextCompat.getColor(this, R.color.colorNightForeground))
-                    .colorWindowBackground(ContextCompat.getColor(this, R.color.colorNightPrimaryDark))
-                    .textColorPrimary(ContextCompat.getColor(this, R.color.textColorPrimaryNight))
-                    .textColorSecondary(ContextCompat.getColor(this, R.color.textColorSecondaryNight))
-                    .textColorPrimaryInverse(ContextCompat.getColor(this, R.color.textColorPrimary))
-                    .textColorSecondaryInverse(ContextCompat.getColor(this, R.color.textColorSecondary))
+                    .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : ContextCompat.getColor(this, R.color.colorStatusBarDefault))
+                    .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorPrimaryDarkDefault))
+                    .colorWindowBackground(ContextCompat.getColor(this, R.color.colorWindowBackgroundDefault))
+                    .colorNavigationBar(ContextCompat.getColor(this, R.color.colorNavigationBarDefault))
+                    .colorPrimary(ContextCompat.getColor(this, R.color.colorPrimaryDefault))
+                    .colorAccent(ContextCompat.getColor(this, R.color.colorAccent))
+                    .apply();
+        } else if (Utility.getTheme(getApplicationContext()) == THEME_ONE) {
+            Aesthetic.Companion.get()
+                    .isDark(false)
+                    .lightStatusBarMode(AutoSwitchMode.OFF)
+                    .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : ContextCompat.getColor(this, R.color.colorStatusBarOne))
+                    .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorPrimaryDarkOne))
+                    .colorWindowBackground(ContextCompat.getColor(this, R.color.colorWindowBackgroundOne))
+                    .colorNavigationBar(ContextCompat.getColor(this, R.color.colorNavigationBarOne))
+                    .colorPrimary(ContextCompat.getColor(this, R.color.colorPrimaryOne))
+                    .colorAccent(ContextCompat.getColor(this, R.color.colorAccentOne))
+                    .apply();
+        } else if (Utility.getTheme(getApplicationContext()) == THEME_TWO) {
+            Aesthetic.Companion.get()
+                    .isDark(false)
+                    .lightStatusBarMode(AutoSwitchMode.OFF)
+                    .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : ContextCompat.getColor(this, R.color.colorStatusBarTwo))
+                    .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorPrimaryDarkTwo))
+                    .colorWindowBackground(ContextCompat.getColor(this, R.color.colorWindowBackgroundTwo))
+                    .colorNavigationBar(ContextCompat.getColor(this, R.color.colorNavigationBarTwo))
+                    .colorPrimary(ContextCompat.getColor(this, R.color.colorPrimaryTwo))
+                    .colorAccent(ContextCompat.getColor(this, R.color.colorAccentTwo))
                     .apply();
         } else {
-            int theme = getActivityTheme();
-            if (theme == THEME_DAY || theme == THEME_DAY_NIGHT) {
-                Aesthetic.Companion.get()
-                        .isDark(false)
-                        .lightStatusBarMode(AutoSwitchMode.ON)
-                        .colorPrimary(ContextCompat.getColor(this, R.color.colorPrimary))
-                        .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorWhite))
-                        .colorStatusBar(ContextCompat.getColor(this, R.color.colorWhite))
-                        .colorNavigationBar(ContextCompat.getColor(this, R.color.colorBlack))
-                        .colorAccent(ContextCompat.getColor(this, R.color.colorAccent))
-                        .colorCardViewBackground(ContextCompat.getColor(this, R.color.colorForeground))
-                        .colorWindowBackground(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .textColorPrimary(ContextCompat.getColor(this, R.color.colorWhite))
-                        .textColorSecondary(ContextCompat.getColor(this, R.color.textColorSecondary))
-                        .textColorPrimaryInverse(ContextCompat.getColor(this, R.color.textColorPrimaryNight))
-                        .textColorSecondaryInverse(ContextCompat.getColor(this, R.color.textColorSecondaryNight))
-                        .apply();
-            } else if (theme == THEME_AMOLED) {
-                Aesthetic.Companion.get()
-                        .isDark(true)
-                        .lightStatusBarMode(AutoSwitchMode.OFF)
-                        .colorPrimary(Color.BLACK)
-                        .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorWhite))
-                        .colorStatusBar(ContextCompat.getColor(this, R.color.colorWhite))
-                        .colorNavigationBar(Color.BLACK)
-                        .colorAccent(Color.WHITE)
-                        .colorCardViewBackground(Color.BLACK)
-                        .colorWindowBackground(Color.BLACK)
-                        .textColorPrimary(Color.WHITE)
-                        .textColorSecondary(Color.WHITE)
-                        .textColorPrimaryInverse(Color.BLACK)
-                        .textColorSecondaryInverse(Color.BLACK)
-                        .apply();
-            }
+            Aesthetic.Companion.get()
+                    .isDark(false)
+                    .lightStatusBarMode(AutoSwitchMode.OFF)
+                    .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : ContextCompat.getColor(this, R.color.colorStatusBarThree))
+                    .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorPrimaryDarkThree))
+                    .colorWindowBackground(ContextCompat.getColor(this, R.color.colorWindowBackgroundThree))
+                    .colorNavigationBar(ContextCompat.getColor(this, R.color.colorNavigationBarThree))
+                    .colorPrimary(ContextCompat.getColor(this, R.color.colorPrimaryThree))
+                    .colorAccent(ContextCompat.getColor(this, R.color.colorAccentThree))
+                    .apply();
         }
-    }
-
-    /**
-     * Determine if the theme should be a night theme.
-     *
-     * @return True if the current theme is a night theme.
-     */
-    public boolean isNight() {
-        int time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        return ((time < getDayStart() || time > getDayEnd()) && getActivityTheme() == THEME_DAY_NIGHT) || getActivityTheme() == THEME_NIGHT;
-    }
-
-    /**
-     * Get the theme to be used for activities and things. Despite
-     * what the name implies, it does not return a theme resource,
-     * but rather one of Alarmio.THEME_DAY_NIGHT, Alarmio.THEME_DAY,
-     * Alarmio.THEME_NIGHT, or Alarmio.THEME_AMOLED.
-     *
-     * @return The theme to be used for activites.
-     */
-    public int getActivityTheme() {
-        return PreferenceEntity.THEME.getValue(this);
-    }
-
-    /**
-     * Determine if the sunrise/sunset stuff should occur automatically.
-     *
-     * @return True if the day/night stuff is automated.
-     */
-    public boolean isDayAuto() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && (boolean) PreferenceEntity.DAY_AUTO.getValue(this);
-    }
-
-    /**
-     * @return the hour of the start of the day (24h), as specified by the user
-     */
-    public int getDayStart() {
-        if (isDayAuto() && getSunsetCalculator() != null)
-            return getSunsetCalculator().getOfficialSunriseCalendarForDate(Calendar.getInstance()).get(Calendar.HOUR_OF_DAY);
-        else return PreferenceEntity.DAY_START.getValue(this);
-    }
-
-    /**
-     * @return the hour of the end of the day (24h), as specified by the user
-     */
-    public int getDayEnd() {
-        if (isDayAuto() && getSunsetCalculator() != null)
-            return getSunsetCalculator().getOfficialSunsetCalendarForDate(Calendar.getInstance()).get(Calendar.HOUR_OF_DAY);
-        else return PreferenceEntity.DAY_END.getValue(this);
-    }
-
-    /**
-     * @return the hour of the calculated sunrise time, or null.
-     */
-    @Nullable
-    public Integer getSunrise() {
-        if (getSunsetCalculator() != null)
-            return getSunsetCalculator().getOfficialSunsetCalendarForDate(Calendar.getInstance()).get(Calendar.HOUR_OF_DAY);
-        else return null;
-    }
-
-    /**
-     * @return the hour of the calculated sunset time, or null.
-     */
-    @Nullable
-    public Integer getSunset() {
-        if (getSunsetCalculator() != null)
-            return getSunsetCalculator().getOfficialSunsetCalendarForDate(Calendar.getInstance()).get(Calendar.HOUR_OF_DAY);
-        else return null;
-    }
-
-    /**
-     * @return the current SunriseSunsetCalculator object, or null if it cannot
-     * be instantiated.
-     * @see [SunriseSunsetLib Repo](https://github.com/mikereedell/sunrisesunsetlib-java)
-     */
-    @Nullable
-    private SunriseSunsetCalculator getSunsetCalculator() {
-        if (sunsetCalculator == null && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            try {
-                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-                android.location.Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(new Criteria(), false));
-                sunsetCalculator = new SunriseSunsetCalculator(new Location(location.getLatitude(), location.getLongitude()), TimeZone.getDefault().getID());
-            } catch (NullPointerException ignored) {
-            }
-        }
-
-        return sunsetCalculator;
     }
 
     /**
@@ -369,16 +400,6 @@ public class Alarmio extends Application implements Player.EventListener {
      */
     public boolean isRingtonePlaying() {
         return currentRingtone != null && currentRingtone.isPlaying();
-    }
-
-    /**
-     * Get the currently playing ringtone.
-     *
-     * @return The currently playing ringtone, or null.
-     */
-    @Nullable
-    public Ringtone getCurrentRingtone() {
-        return currentRingtone;
     }
 
     public void playRingtone(Ringtone ringtone) {
@@ -454,10 +475,10 @@ public class Alarmio extends Application implements Player.EventListener {
 
     public void setListener(ActivityListener listener) {
         this.listener = listener;
-//
-//        if (listener != null) {
-//            updateTheme();
-//        }
+
+        if (listener != null) {
+            updateTheme();
+        }
     }
 
     @Override

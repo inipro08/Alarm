@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">Alarm Up</string>
-    <string name="txt_confirm_got_it">I got it</string>
     <string name="item_alarm">Alarm</string>
     <string name="item_time_zone">Time Zone</string>
     <string name="item_timer">Timer</string>
-    <string name="txt_channel_notification">This channel of notification of Alarm Now</string>
 
     <string name="word_day">day</string>
     <string name="word_days">days</string>
@@ -23,22 +21,51 @@
 
     <string name="title_alarm">Alarm %d</string>
 
-    <string name="title_snooze_custom">Custom…</string>
-    <string name="msg_snoozed_until">Snoozed until %s</string>
-    <string name="txt_ring_default">Morning (Default)</string>
-    <string name="txt_edit_item">Type content alarm..</string>
-    <string name="txt_m002_item_todo">TODO</string>
     <string name="txt_alarm_label">Alarm Label</string>
     <string name="txt_timer_label">Timer Label</string>
     <string name="title_timer">Timer</string>
 
     <string name="txt_alarm_empty_text">Alarm is empty, \nPress the \'+\' button to create one</string>
-    <string name="txt_timezone_empty_text">TimeZone is empty, \nPress the \'+\' button to create one</string>
-
-    <string name="title_sound_none">None</string>
+    <string name="txt_timezone_empty_text">TimeZone is empty. \nPress the search icon to create one</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txt_activity_alarm_may_be">Maybe you don\'t know ?</string>
-
+    <string name="cancel">Cancel</string>
+    <string name="txt_timer_delete">Delete Timer</string>
+    <string name="txt_m005_this_is">This is an alarm product that focuses on minimalism in design and is easy to use for everyone.</string>
+    <string name="txt_idiot_developer">Inis</string>
+    <string name="txt_m005_author">Author</string>
+    <string name="txt_rate">Rate</string>
+    <string name="txt_m005_alarm_up">Alarm Up</string>
+    <string name="txt_m005_about_me">About App</string>
+    <string name="txt_m005_update_theme">Update Theme</string>
+    <string name="txt_m005_version_1_1">Version 1.1</string>
+    <string name="prefs_theme_key">theme</string>
+    <string name="txt_m003_search_city">Search city</string>
+    <string name="txt_m003_item_search">Search for a city</string>
+    <string name="txt_m003_item_city">CITY</string>
+    <string name="txt_content_alarm">Content Alarm</string>
+    <string name="txt_date">June 14 2017, 3:49 PM</string>
+    <string name="txt_after_5_minutes">After 5 Minutes</string>
+    <string name="txt_cancel">Cancel</string>
+    <string name="txt_1_more_minutes">One More Minute</string>
+    <string name="txt_1_cancel">Cancel</string>
+    <string name="txt_m002_item_vibrate">Vibrate</string>
+    <string name="txt_m002_item_sound">Sound</string>
+    <string name="txt_m005_update_language">Update Language</string>
+    <string name="txt_m004_hours">Hours</string>
+    <string name="txt_m004_minutes">Minutes</string>
+    <string name="txt_m004_seconds">Seconds</string>
+    <string name="txt_06_56">06 : 56</string>
+    <string name="txt_repeat">Repeat</string>
+    <string name="txt_m003_item_delete">Delete</string>
+    <string name="txt_m003_item_12_40">12 : 40</string>
+    <string name="txt_m003_item_date">Date</string>
+    <string name="txt_m004_item_00_00_00">00 : 00 : 00</string>
+    <string name="txt_bottom_bar_alarm">Alarm</string>
+    <string name="txt_bottom_bar_timezone">Timezone</string>
+    <string name="txt_bottom_bar_timer">Timer</string>
+    <string name="txt_bottom_bar_settings">Settings</string>
+    <string name="txt_dialog_timer">Please set a timer greater than 0 seconds and less than 24 hours !</string>
+    <string name="txt_got_it">Got it</string>
 </resources>

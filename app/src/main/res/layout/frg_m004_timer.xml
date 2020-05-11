@@ -2,19 +2,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_bg_app">
+    android:layout_height="match_parent">
 
     <ListView
         android:id="@+id/lv_m004_timer"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/ig_m004_add_timer"
-        android:layout_width="@dimen/d_48"
-        android:layout_height="@dimen/d_48"
+        android:layout_width="@dimen/d_60"
+        android:layout_height="@dimen/d_60"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="@dimen/d_20"
         android:background="@android:color/transparent"
@@ -41,8 +40,8 @@
                 android:id="@+id/tv_m004_hours"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hours"
-                android:textColor="@color/colorM001Cyan"
+                android:text="@string/txt_m004_hours"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/d_18"
                 android:textStyle="bold" />
 
@@ -53,12 +52,7 @@
                 android:layout_marginTop="@dimen/d_15"
                 android:scrollbarSize="@dimen/d_20"
                 android:solidColor="@android:color/transparent"
-                android:theme="@style/NumberPickerCustom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:theme="@style/NumberPickerCustom" />
 
         </LinearLayout>
 
@@ -84,8 +78,8 @@
                 android:id="@+id/tv_m004_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Minutes"
-                android:textColor="@color/colorM001Cyan"
+                android:text="@string/txt_m004_minutes"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/d_18"
                 android:textStyle="bold" />
 
@@ -95,12 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/d_15"
                 android:solidColor="@android:color/transparent"
-                android:theme="@style/NumberPickerCustom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:theme="@style/NumberPickerCustom" />
 
         </LinearLayout>
 
@@ -126,8 +115,8 @@
                 android:id="@+id/tv_m004_seconds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Seconds"
-                android:textColor="@color/colorM001Cyan"
+                android:text="@string/txt_m004_seconds"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/d_18"
                 android:textStyle="bold" />
 
@@ -137,12 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/d_15"
                 android:solidColor="@android:color/transparent"
-                android:theme="@style/NumberPickerCustom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:theme="@style/NumberPickerCustom" />
 
         </LinearLayout>
     </TableRow>
@@ -152,8 +136,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="@dimen/d_100"
-        android:visibility="gone"
+        android:layout_marginBottom="@dimen/d_120"
+        android:visibility="visible"
         app:fabSize="normal"
         app:srcCompat="@drawable/ic_play" />
+
+    <LinearLayout
+        android:id="@+id/admob_timer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_80"
+        android:layout_gravity="bottom"
+        android:orientation="vertical" />
 </FrameLayout>

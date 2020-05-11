@@ -1,6 +1,6 @@
 package com.datpt10.alarmup.util;
 
-import com.datpt10.alarmup.ANApplication;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.model.entities.TimeZoneEntity;
 
 import java.io.Serializable;
@@ -15,22 +15,23 @@ public class StorageCommon implements Serializable {
     private boolean mIsActive;
     private String mFlag;
 
-    private transient WeakReference<ANApplication> reference;
+    private transient WeakReference<Alarmup> reference;
     private String preTAG;
     private String mSnooze;
     private String mCity;
     private String mHourCity;
     private List<TimeZoneEntity> mList;
+    private String extraFrg;
 
-    public StorageCommon(WeakReference<ANApplication> reference) {
+    public StorageCommon(WeakReference<Alarmup> reference) {
         this.reference = reference;
     }
 
-    public WeakReference<ANApplication> getReference() {
+    public WeakReference<Alarmup> getReference() {
         return reference;
     }
 
-    public void setReference(WeakReference<ANApplication> reference) {
+    public void setReference(WeakReference<Alarmup> reference) {
         this.reference = reference;
     }
 
@@ -88,5 +89,13 @@ public class StorageCommon implements Serializable {
 
     public void setListTimeZone(List<TimeZoneEntity> mListTimeZone) {
         this.mList = mListTimeZone;
+    }
+
+    public void setTimerFrg(String extraTimerId) {
+        this.extraFrg = extraTimerId;
+    }
+
+    public String getExtraFrg() {
+        return extraFrg;
     }
 }

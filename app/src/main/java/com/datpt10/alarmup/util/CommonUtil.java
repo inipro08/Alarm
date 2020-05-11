@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.RingtoneManager;
@@ -19,9 +21,9 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
-import com.datpt10.alarmup.ANApplication;
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
+import com.datpt10.alarmup.activity.AlarmActivity;
 import com.datpt10.alarmup.model.AlarmEntity;
 import com.datpt10.alarmup.model.SoundEntity;
 import com.datpt10.alarmup.view.event.OnOKDialogCallBack;
@@ -97,7 +99,7 @@ public class CommonUtil {
             System.out.println(tag + ":" + text);
         }
     }
-    
+
     public static String getDateNow(String dateStyle) {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat(dateStyle, Locale.getDefault());
@@ -173,27 +175,14 @@ public class CommonUtil {
         }
     }
 
-    public Date getDateAfter(String txtDate) {
-        Date date = stringToDateLocal(txtDate, CommonUtil.DATE_NOW_DY);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar.getTime();
-    }
-
-
-    public void defineBackTag(String backTag, String key) {
-        mBackFlow.put(key, backTag);
-    }
-
     public void savePrefContent(Context context, String key, String text) {
         SharedPreferences.Editor editor = context.getSharedPreferences(SAVE_DATA, MODE_PRIVATE).edit();
         editor.putString(key, text);
         editor.apply();
     }
 
-
     public void savePrefContent(String key, int value) {
-        savePrefContent(ANApplication.getInstance(), key, value);
+        savePrefContent(Alarmup.getInstance(), key, value);
     }
 
     public void savePrefContent(Context context, String key, int value) {
@@ -203,7 +192,7 @@ public class CommonUtil {
     }
 
     public void savePrefContent(String key, String text) {
-        savePrefContent(ANApplication.getInstance(), key, text);
+        savePrefContent(Alarmup.getInstance(), key, text);
     }
 
     public String getPrefContent(String key) {
@@ -211,10 +200,10 @@ public class CommonUtil {
     }
 
     public String getPrefContent(String key, boolean isDeleted) {
-        String result = ANApplication.getInstance()
+        String result = Alarmup.getInstance()
                 .getSharedPreferences(SAVE_DATA, MODE_PRIVATE).getString(key, null);
         if (result != null && isDeleted) {
-            SharedPreferences.Editor editor = ANApplication.getInstance()
+            SharedPreferences.Editor editor = Alarmup.getInstance()
                     .getSharedPreferences(SAVE_DATA, MODE_PRIVATE).edit();
             editor.remove(key);
             editor.apply();
@@ -223,10 +212,10 @@ public class CommonUtil {
     }
 
     public int getIntPrefContent(String key, boolean isDeleted) {
-        int result = ANApplication.getInstance()
+        int result = Alarmup.getInstance()
                 .getSharedPreferences(SAVE_DATA, MODE_PRIVATE).getInt(key, 0);
         if (result != 0 && isDeleted) {
-            SharedPreferences.Editor editor = ANApplication.getInstance()
+            SharedPreferences.Editor editor = Alarmup.getInstance()
                     .getSharedPreferences(SAVE_DATA, MODE_PRIVATE).edit();
             editor.remove(key);
             editor.apply();
@@ -270,8 +259,8 @@ public class CommonUtil {
         AlertDialog mAlert = new AlertDialog.Builder(context).create();
         doKeepDialog(mAlert);
         mAlert.setTitle(R.string.app_name);
-        mAlert.setMessage(ANApplication.getInstance().getString(message));
-        mAlert.setButton(AlertDialog.BUTTON_POSITIVE, ANApplication.getInstance().getText(R.string.txt_confirm_got_it), (dialogInterface, i) -> {
+        mAlert.setMessage(Alarmup.getInstance().getString(message));
+        mAlert.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.txt_got_it), (dialogInterface, i) -> {
             if (onOKDialogCallBack == null) return;
             onOKDialogCallBack.handleOKButton1();
         });
@@ -284,7 +273,7 @@ public class CommonUtil {
         doKeepDialog(mAlert);
         mAlert.setTitle(R.string.app_name);
         mAlert.setMessage(message);
-        mAlert.setButton(AlertDialog.BUTTON_POSITIVE, ANApplication.getInstance().getText(R.string.txt_confirm_got_it), (dialogInterface, i) -> {
+        mAlert.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.txt_got_it), (dialogInterface, i) -> {
             if (onOKDialogCallBack == null) return;
             onOKDialogCallBack.handleOKButton1();
         });
@@ -316,13 +305,11 @@ public class CommonUtil {
         editor.apply();
     }
 
-    public void showListRingTone(Context context, TextView tvRingFile, AlarmEntity alarmEntity1, Alarmio mAlarmio) {
-        ArrayList<SoundEntity> sounds;
+    public void showListRingTone(Context context, TextView tvRingFile, AlarmEntity alarmEntity1, Alarmup mAlarmup) {
+        ArrayList<SoundEntity> sounds = new ArrayList<>();
         ArrayAdapter<String> adapter;
         List<String> soundName;
-
         int[] item = new int[1];
-        sounds = new ArrayList<>();
         RingtoneManager manager = new RingtoneManager(context);
         manager.setType(RingtoneManager.TYPE_ALARM);
         Cursor cursor = manager.getCursor();
@@ -343,20 +330,37 @@ public class CommonUtil {
         AlertDialog alertDialog = builder.create();
         alertDialog.getListView().setOnItemClickListener((parent, view, position, id) -> {
             SoundEntity soundEntity = sounds.get(position);
-            if (soundEntity.isPlaying(mAlarmio)) {
-                soundEntity.stop(mAlarmio);
+            if (soundEntity.isPlaying(mAlarmup)) {
+                soundEntity.stop(mAlarmup);
             } else {
-                soundEntity.preview(mAlarmio);
+                soundEntity.preview(mAlarmup);
             }
             item[0] = position;
         });
         alertDialog.getListView().setDividerHeight(2);
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OKAY", (dialog, position) -> {
-            sounds.get(item[0]).stop(mAlarmio);
+            sounds.get(item[0]).stop(mAlarmup);
             tvRingFile.setText(sounds.get(item[0]).getName());
             alarmEntity1.setSound(context, sounds.get(item[0]));
         });
         alertDialog.show();
+    }
+
+    public String getFirstRingtone(Context context, AlarmEntity alarmEntity1) {
+        ArrayList<SoundEntity> sounds = new ArrayList<>();
+        RingtoneManager manager = new RingtoneManager(context);
+        manager.setType(RingtoneManager.TYPE_ALARM);
+        Cursor cursor = manager.getCursor();
+        int count = cursor.getCount();
+        if (count > 0 && cursor.moveToFirst()) {
+            do {
+                sounds.add(new SoundEntity(cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX), SoundEntity.TYPE_RINGTONE, cursor.getString(RingtoneManager.URI_COLUMN_INDEX) + "/" + cursor.getString(RingtoneManager.ID_COLUMN_INDEX)));
+            } while (cursor.moveToNext());
+        }
+        String firstRingtone = sounds.get(0).getName();
+        alarmEntity1.setSound(context, sounds.get(0));
+
+        return firstRingtone;
     }
 
     public String getDateCity(String zoneId) {

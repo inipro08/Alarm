@@ -23,11 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.datpt10.alarmup.ANApplication;
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.AlarmEntity;
 import com.datpt10.alarmup.model.TimerEntity;
@@ -46,7 +44,7 @@ import java.util.List;
 /**
  * create by datpt on 3/28/2019.
  */
-public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBackToView> extends Fragment implements Alarmio.AlarmListener, Animation.AnimationListener, View.OnClickListener, OnCallBackToView, Alarmio.ActivityListener {
+public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBackToView> extends Fragment implements Alarmup.AlarmListener, Animation.AnimationListener, View.OnClickListener, OnCallBackToView, Alarmup.ActivityListener {
     public static final String TAG = BaseFragment.class.getName();
     private static final int LAYOUT_NONE = -1;
     protected final HashMap<String, BaseFragment> mFragChild = new HashMap<>();
@@ -61,7 +59,7 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
     protected Animation mAnim;
     protected int mId;
     protected View mClickedView;
-    private Alarmio alarmio;
+    private Alarmup alarmup;
 
     protected abstract void initViews();
 
@@ -93,24 +91,24 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        alarmio = (Alarmio) mContext.getApplicationContext();
-        alarmio.addListener(this);
+        alarmup = (Alarmup) mContext.getApplicationContext();
+        alarmup.addListener(this);
     }
 
     protected void initData() {
     }
 
     @Nullable
-    protected Alarmio getAlarmio() {
-        return alarmio;
+    protected Alarmup getAlarmup() {
+        return alarmup;
     }
 
     protected List<AlarmEntity> getAlarmList() {
-        return alarmio.getAlarms();
+        return alarmup.getAlarms();
     }
 
     protected List<TimerEntity> getTimerList() {
-        return alarmio.getTimers();
+        return alarmup.getTimers();
     }
 
     public String getTagCurrentChildSource() {
@@ -165,11 +163,9 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
         if (mCallBack instanceof BaseFragment) {
             ((BaseFragment) mCallBack).setTagCurrentChildFrg(getTAG());
         }
-
         int layoutId = getLayoutId();
         mContext = getActivity();
         mPresenter = getPresenter();
-
         mRootView = inflater.inflate(layoutId, container, false);
         mAnim = AnimationUtils.loadAnimation(mContext, R.anim.alpha);
         mAnim.setAnimationListener(this);
@@ -199,11 +195,11 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
     }
 
     public void showNotify(int text) {
-        Toast.makeText(ANApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Alarmup.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 
     public void showNotify(String text) {
-        Toast.makeText(ANApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Alarmup.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 
     protected abstract void defineBackKey();
@@ -237,7 +233,7 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
     }
 
     public final StorageCommon getStorage() {
-        return ANApplication.getInstance().getStorageCommon();
+        return Alarmup.getInstance().getStorageCommonAlarmUp();
     }
 
     @SuppressLint("ResourceType")
@@ -294,8 +290,8 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
 
     @Override
     public void onDestroy() {
-        alarmio.removeListener(this);
-        alarmio = null;
+        alarmup.removeListener(this);
+        alarmup = null;
         super.onDestroy();
     }
 
@@ -428,7 +424,6 @@ public abstract class BaseFragment<T extends BasePresenter, G extends OnCallBack
 
     @Override
     public void requestPermissions(String... permissions) {
-        ActivityCompat.requestPermissions(getActivity(), permissions, 0);
     }
 
     @Override

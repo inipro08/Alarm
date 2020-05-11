@@ -85,10 +85,10 @@ public class FormatUtils {
         long micros = TimeUnit.MILLISECONDS.toMicros(millis) % TimeUnit.SECONDS.toMicros(1) / 10000;
 
         if (hours > 0)
-            return String.format(Locale.getDefault(), "%dh %02dm %02ds %02d", hours, minutes, seconds, micros);
+            return String.format(Locale.getDefault(), "%dh : %02dm : %02ds  %02d", hours, minutes, seconds, micros);
         else if (minutes > 0)
-            return String.format(Locale.getDefault(), "%dm %02ds %02d", minutes, seconds, micros);
-        else return String.format(Locale.getDefault(), "%ds %02d", seconds, micros);
+            return String.format(Locale.getDefault(), "%dm : %02ds  %02d", minutes, seconds, micros);
+        else return String.format(Locale.getDefault(), "%ds  %02d", seconds, micros);
     }
 
     /**

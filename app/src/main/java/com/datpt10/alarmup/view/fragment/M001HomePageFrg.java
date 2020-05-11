@@ -7,9 +7,12 @@ import android.widget.FrameLayout;
 
 import androidx.core.content.ContextCompat;
 
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
+import com.datpt10.alarmup.activity.HomeActivity;
 import com.datpt10.alarmup.base.BaseFragment;
 import com.datpt10.alarmup.presenter.M001HomePagePresenter;
+import com.datpt10.alarmup.util.CommonUtil;
 import com.datpt10.alarmup.view.event.OnHomeBackToView;
 import com.datpt10.alarmup.view.event.OnM001HomePageCallBack;
 
@@ -24,19 +27,17 @@ import jahirfiquitiva.libs.fabsmenu.TitleFAB;
 public class M001HomePageFrg extends BaseFragment<M001HomePagePresenter, OnHomeBackToView> implements OnM001HomePageCallBack {
     public static final String TAG = M001HomePageFrg.class.getName();
     private FABsMenu menu;
-    private TitleFAB timerFab;
-    private TitleFAB timeZoneFab;
-    private TitleFAB alarmFab;
+    private TitleFAB alarmFab, timeZoneFab, timerFab, settingFab;
     private FrameLayout mLnBottomBar;
 
     @Override
     protected void initViews() {
         mLnBottomBar = findViewById(R.id.ln_m001_bottom_bar);
-
         menu = findViewById(R.id.fabsMenu, this);
-        timerFab = findViewById(R.id.tv_m001_bottom_bar_timer, this);
-        timeZoneFab = findViewById(R.id.tv_m001_bottom_bar_time_zone, this);
-        alarmFab = findViewById(R.id.tv_m001_bottom_bar_alarm, this);
+        alarmFab = findViewById(R.id.tv_m001_bottom_bar_alarm, this, Alarmup.getInstance().getRegularFont());
+        timeZoneFab = findViewById(R.id.tv_m001_bottom_bar_time_zone, this, Alarmup.getInstance().getRegularFont());
+        timerFab = findViewById(R.id.tv_m001_bottom_bar_timer, this, Alarmup.getInstance().getRegularFont());
+        settingFab = findViewById(R.id.tv_m001_bottom_bar_settings, this, Alarmup.getInstance().getRegularFont());
 
         menu.setMenuListener(new FABsMenuListener() {
             @Override
@@ -48,11 +49,13 @@ public class M001HomePageFrg extends BaseFragment<M001HomePagePresenter, OnHomeB
                 }
             }
         });
-        showFragmentDefault();
-    }
-
-    private void showFragmentDefault() {
-        showChildFrgScreen(TAG, M002AlarmFrg.TAG);
+        String timerExtra = CommonUtil.getInstance().getPrefContent("TIMER_EXTRA");
+        int duration = CommonUtil.getInstance().getIntPrefContent(HomeActivity.EXTRA_TIMER);
+        if (timerExtra != null || duration > 0) {
+            showChildFrgScreen(TAG, M004TimerFrg.TAG);
+        } else {
+            showChildFrgScreen(TAG, M002AlarmFrg.TAG);
+        }
     }
 
     @Override
@@ -98,6 +101,10 @@ public class M001HomePageFrg extends BaseFragment<M001HomePagePresenter, OnHomeB
                 break;
             case R.id.tv_m001_bottom_bar_timer:
                 showChildFrgScreen(TAG, M004TimerFrg.TAG);
+                menu.collapseImmediately();
+                break;
+            case R.id.tv_m001_bottom_bar_settings:
+                showChildFrgScreen(TAG, M005SettingsFrg.TAG);
                 menu.collapseImmediately();
                 break;
             default:

@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.AlarmEntity;
 import com.datpt10.alarmup.model.PreferenceEntity;
@@ -29,24 +29,24 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class SleepReminderService extends Service {
-    private Alarmio alarmio;
+    private Alarmup alarmup;
     private PowerManager powerManager;
     private ScreenReceiver receiver;
 
     /**
      * Get a sleepy alarm. Well, get the next alarm that should trigger a sleep alert.
      *
-     * @param alarmio The active Application instance.
+     * @param alarmup The active Application instance.
      * @return The next [AlarmData](../data/AlarmData) that should trigger a
      * sleep alert, or null if there isn't one.
      */
     @Nullable
-    public static AlarmEntity getSleepyAlarm(Alarmio alarmio) {
-        if (PreferenceEntity.SLEEP_REMINDER.getValue(alarmio)) {
-            AlarmEntity nextAlarm = getNextWakeAlarm(alarmio);
+    public static AlarmEntity getSleepyAlarm(Alarmup alarmup) {
+        if (PreferenceEntity.SLEEP_REMINDER.getValue(alarmup)) {
+            AlarmEntity nextAlarm = getNextWakeAlarm(alarmup);
             if (nextAlarm != null) {
                 Calendar nextTrigger = nextAlarm.getNext();
-                nextTrigger.set(Calendar.MINUTE, nextTrigger.get(Calendar.MINUTE) - (int) TimeUnit.MILLISECONDS.toMinutes((long) PreferenceEntity.SLEEP_REMINDER_TIME.getValue(alarmio)));
+                nextTrigger.set(Calendar.MINUTE, nextTrigger.get(Calendar.MINUTE) - (int) TimeUnit.MILLISECONDS.toMinutes((long) PreferenceEntity.SLEEP_REMINDER_TIME.getValue(alarmup)));
 
                 if (Calendar.getInstance().after(nextTrigger))
                     return nextAlarm;
@@ -59,11 +59,11 @@ public class SleepReminderService extends Service {
     /**
      * Get the next scheduled [AlarmData](../data/AlarmData) that will ring.
      *
-     * @param alarmio The active Application instance.
+     * @param alarmup The active Application instance.
      * @return The next AlarmData that will wake the user up.
      */
     @Nullable
-    public static AlarmEntity getNextWakeAlarm(Alarmio alarmio) {
+    public static AlarmEntity getNextWakeAlarm(Alarmup alarmup) {
         Calendar nextNoon = Calendar.getInstance();
         nextNoon.set(Calendar.HOUR_OF_DAY, 12);
         if (nextNoon.before(Calendar.getInstance()))
@@ -75,7 +75,7 @@ public class SleepReminderService extends Service {
         while (nextDay.before(Calendar.getInstance()))
             nextDay.set(Calendar.DAY_OF_YEAR, nextDay.get(Calendar.DAY_OF_YEAR) + 1);
 
-        List<AlarmEntity> alarms = alarmio.getAlarms();
+        List<AlarmEntity> alarms = alarmup.getAlarms();
         AlarmEntity nextAlarm = null;
         for (AlarmEntity alarm : alarms) {
             Calendar next = alarm.getNext();
@@ -97,19 +97,19 @@ public class SleepReminderService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && ContextCompat.checkSelfPermission(context, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED)
             return;
 
-        Alarmio alarmio;
-        if (context instanceof Alarmio)
-            alarmio = (Alarmio) context;
-        else alarmio = (Alarmio) context.getApplicationContext();
+        Alarmup alarmup;
+        if (context instanceof Alarmup)
+            alarmup = (Alarmup) context;
+        else alarmup = (Alarmup) context.getApplicationContext();
 
-        if (getSleepyAlarm(alarmio) != null)
-            ContextCompat.startForegroundService(context, new Intent(alarmio, SleepReminderService.class));
+        if (getSleepyAlarm(alarmup) != null)
+            ContextCompat.startForegroundService(context, new Intent(alarmup, SleepReminderService.class));
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        alarmio = (Alarmio) getApplicationContext();
+        alarmup = (Alarmup) getApplicationContext();
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         receiver = new ScreenReceiver(this);
         refreshState();
@@ -138,7 +138,7 @@ public class SleepReminderService extends Service {
      */
     public void refreshState() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? powerManager.isInteractive() : powerManager.isScreenOn()) {
-            AlarmEntity nextAlarm = getSleepyAlarm(alarmio);
+            AlarmEntity nextAlarm = getSleepyAlarm(alarmup);
             if (nextAlarm != null) {
                 NotificationCompat.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="@dimen/d_10">
+
+    <TextView
+        android:id="@+id/tv_noti_timer_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/d_18"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_noti_timer_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d_5"
+        android:text="Content notification timer"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/d_16"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d_10"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_noti_timer_one_more"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginEnd="@dimen/d_15"
+            android:layout_marginRight="@dimen/d_15"
+            android:layout_weight="1"
+            android:background="@drawable/bg_noti_bt"
+            android:text="@string/txt_1_more_minutes"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/d_17" />
+
+        <Button
+            android:id="@+id/bt_noti_timer_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginStart="@dimen/d_15"
+            android:layout_marginLeft="@dimen/d_15"
+            android:layout_weight="1"
+            android:background="@drawable/bg_noti_bt"
+            android:text="@string/txt_1_cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/d_17" />
+
+    </LinearLayout>
+</LinearLayout>

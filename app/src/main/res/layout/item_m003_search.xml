@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/d_10"
+    android:layout_marginVertical="@dimen/d_8">
+
+    <TextView
+        android:id="@+id/tv_m003_item_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:text="@string/txt_m003_item_search"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/d_20"
+        android:textStyle="normal" />
+</LinearLayout>

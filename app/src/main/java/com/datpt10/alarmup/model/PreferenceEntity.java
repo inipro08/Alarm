@@ -7,35 +7,26 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
 
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 
 public enum PreferenceEntity {
-    THEME(Alarmio.THEME_DAY_NIGHT),
-    BACKGROUND_IMAGE("https://jfenn.me/images/headers/snowytrees.jpg"),
-    RINGING_BACKGROUND_IMAGE(true),
-    DAY_AUTO(true),
-    DAY_START(6), //hours TODO: change to minutes
-    DAY_END(18), //hours
+    THEME(Alarmup.THEME_DEFAULT),
     ALARM_LENGTH(0),
     TIMER_LENGTH(0),
     DEFAULT_ALARM_RINGTONE(null),
-    DEFAULT_TIMER_RINGTONE(null),
     SLEEP_REMINDER(true),
     SLEEP_REMINDER_TIME(25200000L), //milliseconds
     SLOW_WAKE_UP(true),
     SLOW_WAKE_UP_TIME(300000L), //milliseconds
     ALARM_NAME("%d/ALARM_NAME", null),
+    ALARM_VIBRATE("%d/ALARM_VIBRATE", null),
     ALARM_TIME("%d/ALARM_TIME", (long) 0),
     ALARM_ENABLED("%d/ALARM_ENABLED", true),
     ALARM_DAY_ENABLED("%1$d/ALARM_DAY/%2$d/ENABLED", false),
-    ALARM_VIBRATE("%d/ALARM_VIBRATE", true),
-    ALARM_SOUND("%d/ALARM_SOUND", ""),
+    ALARM_SOUND("%d/ALARM_SOUND", "Default Vibrate"),
     TIMER_LABEL("%d/TIMER_LABEL", ""),
     TIMER_SET_TIME("%d/TIMER_SET_TIME", (long) 0),
-    TIMER_DURATION("%d/TIMER_DURATION", (long) 0),
-    TIMER_VIBRATE("%d/TIMER_VIBRATE", true),
-    TIMER_SOUND("%d/TIMER_SOUND", ""),
-    TIME_ZONE_ENABLED("%s/TIME_ZONE_ENABLED", false);
+    TIMER_DURATION("%d/TIMER_DURATION", (long) 0);
 
     private String name;
     private Object defaultValue;

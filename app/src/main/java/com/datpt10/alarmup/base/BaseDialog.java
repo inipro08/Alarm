@@ -17,8 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.datpt10.alarmup.ANApplication;
-import com.datpt10.alarmup.Alarmio;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.presenter.BasePresenter;
 import com.datpt10.alarmup.util.CommonUtil;
@@ -29,7 +28,7 @@ import com.datpt10.alarmup.widget.ProgressLoading;
 
 
 public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackToView> extends
-        Dialog implements View.OnClickListener, Animation.AnimationListener, Alarmio.AlarmListener, Alarmio.ActivityListener {
+        Dialog implements View.OnClickListener, Animation.AnimationListener, Alarmup.AlarmListener, Alarmup.ActivityListener {
     private static final CharSequence PLACE_HOLDER = "PLACEHOLDER";
     private static final String TAG = "DIALOG";
     private T mPresenter;
@@ -38,7 +37,7 @@ public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackTo
     private boolean isAnimEnd = true;
     private Animation mAnim;
     private int mId;
-    private Alarmio alarmio;
+    private Alarmup alarmup;
 
     public BaseDialog(Context context) {
         this(context, false);
@@ -58,8 +57,8 @@ public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackTo
         mPresenter = getPresenter();
         mAnim = AnimationUtils.loadAnimation(mContext, R.anim.alpha);
         mAnim.setAnimationListener(this);
-        alarmio = (Alarmio) mContext.getApplicationContext();
-        alarmio.addListener(this);
+        alarmup = (Alarmup) mContext.getApplicationContext();
+        alarmup.addListener(this);
         initViews();
     }
 
@@ -73,14 +72,14 @@ public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackTo
         mPresenter = getPresenter();
         mAnim = AnimationUtils.loadAnimation(mContext, R.anim.alpha);
         mAnim.setAnimationListener(this);
-        alarmio = (Alarmio) mContext.getApplicationContext();
-        alarmio.addListener(this);
+        alarmup = (Alarmup) mContext.getApplicationContext();
+        alarmup.addListener(this);
         initViews();
     }
 
     @Nullable
-    protected Alarmio getAlarmio() {
-        return alarmio;
+    protected Alarmup getAlarmup() {
+        return alarmup;
     }
 
     public void showLockDialog() {
@@ -163,7 +162,7 @@ public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackTo
     }
 
     public final StorageCommon getStorage() {
-        return ANApplication.getInstance().getStorageCommon();
+        return Alarmup.getInstance().getStorageCommonAlarmUp();
     }
 
     protected void highLightText(TextView mTvTitle, int start, int end, int color) {
@@ -184,8 +183,8 @@ public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackTo
 
     @Override
     public void dismiss() {
-        alarmio.removeListener(this);
-        alarmio = null;
+        alarmup.removeListener(this);
+        alarmup = null;
         super.dismiss();
     }
 
@@ -248,10 +247,10 @@ public abstract class BaseDialog<T extends BasePresenter, H extends OnCallBackTo
     }
 
     public void showNotify(int text) {
-        Toast.makeText(ANApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Alarmup.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 
     public void showNotify(String text) {
-        Toast.makeText(ANApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Alarmup.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 }

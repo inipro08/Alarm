@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.datpt10.alarmup.ANApplication;
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.util.CommonUtil;
 import com.datpt10.alarmup.util.StorageCommon;
@@ -53,7 +53,7 @@ public abstract class BaseRecycleAdapter<T extends OnCallBackToView, E extends O
     }
 
     public final StorageCommon getStorage() {
-        return ANApplication.getInstance().getStorageCommon();
+        return Alarmup.getInstance().getStorageCommonAlarmUp();
     }
 
     @Override

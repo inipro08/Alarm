@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/color_bg_app"
+    android:keepScreenOn="true"
+    android:orientation="vertical"
+    tools:context=".activity.AlarmActivity">
 
     <TextView
         android:id="@+id/content_alarm"
@@ -10,12 +14,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/d_40"
-        android:text="Content Alarm"
+        android:text="@string/txt_content_alarm"
         android:textAlignment="center"
-        android:textColor="?android:textColorPrimary"
+        android:textColor="@color/colorWhite"
         android:textSize="@dimen/d_28"
         android:textStyle="bold" />
-
 
     <TextView
         android:id="@+id/date"
@@ -23,9 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/d_10"
-        android:text="June 14 2017, 3:49 PM"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="26sp"
+        android:text="@string/txt_date"
+        android:textColor="@color/colorWhite"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <ImageView
@@ -34,62 +37,78 @@
         android:layout_height="@dimen/d_60"
         android:layout_gravity="center"
         android:layout_marginVertical="@dimen/d_10"
+        android:layout_marginTop="@dimen/d_30"
         android:src="@drawable/ic_idea"
         android:tint="@color/colorWhite" />
 
-    <TextView
-        android:id="@+id/question_content"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/d_10"
-        android:layout_weight="0.2"
-        android:text="@string/txt_activity_alarm_may_be"
-        android:textAlignment="center"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="19sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginHorizontal="@dimen/d_30"
         android:layout_weight="1"
-        android:lineSpacingExtra="5dp"
-        android:text="@string/txt_activity_alarm_may_be"
-        android:textAlignment="center"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="@dimen/d_18" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_question_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d_10"
+            android:text="@string/txt_activity_alarm_may_be"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="@dimen/d_30"
+            android:layout_marginTop="@dimen/d_20"
+            android:layout_marginBottom="@dimen/d_20"
+            android:layout_weight="1"
+            android:lineSpacingExtra="5dp"
+            android:text="@string/txt_activity_alarm_may_be"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/d_18" />
+    </LinearLayout>
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="@dimen/d_100"
+        android:layout_height="wrap_content"
         android:layout_weight="0.1">
 
         <Button
             android:id="@+id/bt_more_time"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/d_50"
-            android:layout_marginHorizontal="@dimen/d_30"
+            android:layout_marginHorizontal="@dimen/d_15"
             android:layout_weight="1"
-            android:background="@drawable/bg_bt_app"
-            android:text="More 5 Minutes"
+            android:background="@color/colorAccent"
+            android:text="@string/txt_after_5_minutes"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/d_16" />
+            android:textSize="@dimen/d_17" />
 
         <Button
             android:id="@+id/bt_cancel"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/d_50"
-            android:layout_marginHorizontal="@dimen/d_30"
+            android:layout_marginHorizontal="@dimen/d_15"
             android:layout_weight="1"
-            android:background="@drawable/bg_bt_app"
-            android:text="Cancel"
+            android:background="@color/colorAccent"
+            android:text="@string/txt_cancel"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/d_16" />
+            android:textSize="@dimen/d_17" />
     </TableRow>
+
+    <LinearLayout
+        android:layout_weight=".1"
+        android:id="@+id/layout_ads_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_80"
+        android:orientation="vertical" />
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.DBManager;
 import com.datpt10.alarmup.model.entities.TimeZoneEntity;
@@ -51,6 +53,15 @@ public class TimeZoneAdapter extends BaseRecycleAdapter<OnM003TimeZoneCallBack, 
             zoneHolder.tvTimeZone.setTimeZone(timeZoneEntity.getCity());
         }
         zoneHolder.tvDate.setText(CommonUtil.getInstance().getDateCity(timeZoneEntity.getCity()));
+        zoneHolder.tvDelete.setOnClickListener(v -> {
+            String name = mListData.get(position).getCity();
+            dbManager.deleteTitle(name);
+            removeItem(position);
+            notifyDataSetChanged();
+            updateListData(mListData);
+            mCallBack.changedView();
+
+        });
     }
 
     public void addItem(int pos, TimeZoneEntity entity) {
@@ -72,29 +83,26 @@ public class TimeZoneAdapter extends BaseRecycleAdapter<OnM003TimeZoneCallBack, 
         return mListData;
     }
 
-    public class TimeZoneHolder extends BaseHolder {
-        TextView tvCity, tvDate;
+    public static class TimeZoneHolder extends BaseHolder {
+        TextView tvCity, tvDate, tvDelete;
         TextClock tvTimeZone;
+        ImageView ivDelete;
+
         private CardView cardView;
 
         TimeZoneHolder(View itemView) {
             super(itemView);
-            cardView.setOnClickListener(v -> {
-                String name = mListData.get(getAdapterPosition()).getCity();
-                dbManager.deleteTitle(name);
-                removeItem(getAdapterPosition());
-                notifyDataSetChanged();
-                updateListData(mListData);
-                mCallBack.changedView();
-            });
         }
 
         @Override
         protected void initView() {
-            tvCity = findViewById(R.id.tv_m003_item_city);
-            tvTimeZone = findViewById(R.id.tv_m003_item_time_zone);
-            tvDate = findViewById(R.id.tv_m003_item_date);
+            tvCity = findViewById(R.id.tv_m003_item_city, Alarmup.getInstance().getBoldFont());
+            tvTimeZone = findViewById(R.id.tv_m003_item_time_zone, Alarmup.getInstance().getBoldFont());
+            tvDate = findViewById(R.id.tv_m003_item_date, Alarmup.getInstance().getRegularFont());
             cardView = findViewById(R.id.cardView);
+
+            tvDelete = findViewById(R.id.tv_m003_item_delete, Alarmup.getInstance().getRegularFont());
+            ivDelete = findViewById(R.id.iv_m003_item_delete);
         }
     }
 }

@@ -31,13 +31,13 @@ public class AlarmEntity implements Parcelable {
             return new AlarmEntity[size];
         }
     };
-    public String contentAlarm;
     public Calendar timerAlarm;
     public boolean isEnabledToggle = true;
     public boolean[] daysSelect = new boolean[7];
     public SoundEntity soundAlarm;
+    private String contentAlarm;
+    private String vibrate;
     private int id;
-    //    public boolean isVibrate = true;
 
     public AlarmEntity(int id, Calendar time) {
         this.id = id;
@@ -47,25 +47,24 @@ public class AlarmEntity implements Parcelable {
     public AlarmEntity(int id, Context context) {
         this.id = id;
         contentAlarm = PreferenceEntity.ALARM_NAME.getSpecificOverriddenValue(context, getContent(context), id);
+        vibrate = PreferenceEntity.ALARM_VIBRATE.getSpecificOverriddenValue(context, getVibrate(context), id);
         timerAlarm = Calendar.getInstance();
-        timerAlarm.setTimeInMillis((long) PreferenceEntity.ALARM_TIME.getSpecificValue(context, id));
+        timerAlarm.setTimeInMillis(PreferenceEntity.ALARM_TIME.getSpecificValue(context, id));
         isEnabledToggle = PreferenceEntity.ALARM_ENABLED.getSpecificValue(context, id);
         for (int i = 0; i < 7; i++) {
             daysSelect[i] = PreferenceEntity.ALARM_DAY_ENABLED.getSpecificValue(context, id, i);
         }
-//        isVibrate = PreferenceData.ALARM_VIBRATE.getSpecificValue(context, id);
         soundAlarm = SoundEntity.fromString(PreferenceEntity.ALARM_SOUND.getSpecificOverriddenValue(context, PreferenceEntity.DEFAULT_ALARM_RINGTONE.getValue(context, ""), id));
-        ;
     }
 
     protected AlarmEntity(Parcel in) {
         id = in.readInt();
         contentAlarm = in.readString();
+        vibrate = in.readString();
         timerAlarm = Calendar.getInstance();
         timerAlarm.setTimeInMillis(in.readLong());
         isEnabledToggle = in.readByte() != 0;
         daysSelect = in.createBooleanArray();
-//        isVibrate = in.readByte() != 0;
         if (in.readByte() == 1)
             soundAlarm = SoundEntity.fromString(in.readString());
     }
@@ -78,14 +77,13 @@ public class AlarmEntity implements Parcelable {
      */
     public void onIdChanged(int id, Context context) {
         PreferenceEntity.ALARM_NAME.setValue(context, getContent(context), id);
+        PreferenceEntity.ALARM_VIBRATE.setValue(context, getVibrate(context), id);
         PreferenceEntity.ALARM_TIME.setValue(context, timerAlarm != null ? timerAlarm.getTimeInMillis() : null, id);
         PreferenceEntity.ALARM_ENABLED.setValue(context, isEnabledToggle, id);
         for (int i = 0; i < 7; i++) {
             PreferenceEntity.ALARM_DAY_ENABLED.setValue(context, daysSelect[i], id, i);
         }
-//        PreferenceData.ALARM_VIBRATE.setValue(context, isVibrate, id);
         PreferenceEntity.ALARM_SOUND.setValue(context, soundAlarm != null ? soundAlarm.toString() : null, id);
-
         onRemoved(context);
         this.id = id;
         if (isEnabledToggle)
@@ -99,15 +97,39 @@ public class AlarmEntity implements Parcelable {
      */
     public void onRemoved(Context context) {
         cancel(context, (AlarmManager) context.getSystemService(Context.ALARM_SERVICE));
-
         PreferenceEntity.ALARM_NAME.setValue(context, null, id);
+        PreferenceEntity.ALARM_VIBRATE.setValue(context, null, id);
         PreferenceEntity.ALARM_TIME.setValue(context, null, id);
         PreferenceEntity.ALARM_ENABLED.setValue(context, null, id);
         for (int i = 0; i < 7; i++) {
             PreferenceEntity.ALARM_DAY_ENABLED.setValue(context, null, id, i);
         }
-//        PreferenceData.ALARM_VIBRATE.setValue(context, null, id);
         PreferenceEntity.ALARM_SOUND.setValue(context, null, id);
+    }
+
+    /**
+     * Returns whether the alarm should repeat on a set interval
+     * or not.
+     *
+     * @return If repeat is enabled for this alarm.
+     */
+    public boolean isRepeat() {
+        for (boolean day : daysSelect) {
+            if (day)
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Sets the user-defined "name" of the alarm.
+     *
+     * @param context An active context instance.
+     * @param name    The new name to be set.
+     */
+    public void setContent(Context context, String name) {
+        this.contentAlarm = name;
+        PreferenceEntity.ALARM_NAME.setValue(context, name, id);
     }
 
     /**
@@ -123,30 +145,15 @@ public class AlarmEntity implements Parcelable {
         else return context.getString(R.string.title_alarm, id + 1);
     }
 
-    /**
-     * Returns whether the alarm should repeat on a set interval
-     * or not.
-     *
-     * @return If repeat is enabled for this alarm.
-     */
-    public boolean isRepeat() {
-        for (boolean day : daysSelect) {
-            if (day)
-                return true;
-        }
-
-        return false;
+    public void setVibrate(Context context, String vibrate) {
+        this.vibrate = vibrate;
+        PreferenceEntity.ALARM_VIBRATE.setValue(context, vibrate, id);
     }
 
-    /**
-     * Sets the user-defined "name" of the alarm.
-     *
-     * @param context An active context instance.
-     * @param name    The new name to be set.
-     */
-    public void setContent(Context context, String name) {
-        this.contentAlarm = name;
-        PreferenceEntity.ALARM_NAME.setValue(context, name, id);
+    public String getVibrate(Context context) {
+        if (vibrate != null)
+            return vibrate;
+        else return "Vibrate";
     }
 
     /**
@@ -192,21 +199,9 @@ public class AlarmEntity implements Parcelable {
      */
     public void setDays(Context context, boolean[] days) {
         this.daysSelect = days;
-
         for (int i = 0; i < 7; i++) {
             PreferenceEntity.ALARM_DAY_ENABLED.setValue(context, days[i], id, i);
         }
-    }
-
-    /**
-     * Set whether the alarm should vibrate.
-     *
-     * @param context   An active context instance.
-     * @param isVibrate Whether the alarm should vibrate.
-     */
-    public void setVibrate(Context context, boolean isVibrate) {
-//        this.isVibrate = isVibrate;
-        PreferenceEntity.ALARM_VIBRATE.setValue(context, isVibrate, id);
     }
 
     /**
@@ -256,7 +251,6 @@ public class AlarmEntity implements Parcelable {
             next.set(Calendar.HOUR_OF_DAY, timerAlarm.get(Calendar.HOUR_OF_DAY));
             next.set(Calendar.MINUTE, timerAlarm.get(Calendar.MINUTE));
             next.set(Calendar.SECOND, 0);
-
             while (now.after(next))
                 next.add(Calendar.DATE, 1);
 
@@ -267,13 +261,11 @@ public class AlarmEntity implements Parcelable {
                     nextDay++;
                     nextDay %= 7;
                 }
-
                 next.set(Calendar.DAY_OF_WEEK, nextDay + 1); // + 1 = back to 1-7 range
 
                 while (now.after(next))
                     next.add(Calendar.DATE, 7);
             }
-
             return next;
         }
         return null;
@@ -303,19 +295,10 @@ public class AlarmEntity implements Parcelable {
      */
     private void setAlarm(Context context, AlarmManager manager, long timeMillis) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            manager.setAlarmClock(
-                    new AlarmManager.AlarmClockInfo(
-                            timeMillis,
-                            PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0)
-                    ),
-                    getIntent(context)
-            );
+            manager.setAlarmClock(new AlarmManager.AlarmClockInfo
+                    (timeMillis, PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0)), getIntent(context));
         }
-
-        manager.set(AlarmManager.RTC_WAKEUP,
-                timeMillis - (long) PreferenceEntity.SLEEP_REMINDER_TIME.getValue(context),
-                PendingIntent.getService(context, 0, new Intent(context, SleepReminderService.class), 0));
-
+        manager.set(AlarmManager.RTC_WAKEUP, timeMillis - (long) PreferenceEntity.SLEEP_REMINDER_TIME.getValue(context), PendingIntent.getService(context, 0, new Intent(context, SleepReminderService.class), 0));
         SleepReminderService.refreshSleepTime(context);
     }
 
@@ -351,10 +334,10 @@ public class AlarmEntity implements Parcelable {
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(id);
         parcel.writeString(contentAlarm);
+        parcel.writeString(vibrate);
         parcel.writeLong(timerAlarm.getTimeInMillis());
         parcel.writeByte((byte) (isEnabledToggle ? 1 : 0));
         parcel.writeBooleanArray(daysSelect);
-//        parcel.writeByte((byte) (isVibrate ? 1 : 0));
         parcel.writeByte((byte) (soundAlarm != null ? 1 : 0));
         if (soundAlarm != null)
             parcel.writeString(soundAlarm.toString());
