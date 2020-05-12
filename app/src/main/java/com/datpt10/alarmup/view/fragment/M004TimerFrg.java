@@ -41,11 +41,10 @@ public class M004TimerFrg extends BaseFragment<M004TimerPresenter, OnM001HomePag
     private TimerAdapter timerAdapter;
     private ImageButton imgAddTimer;
     private ListView lvTimer;
-    private AdView mAdView;
 
     @Override
     protected void initViews() {
-        mAdView = new AdView(mContext);
+        AdView mAdView = new AdView(mContext);
         mAdView.setAdUnitId("ca-app-pub-9133689301868303/6140254676");
         mAdView.setAdSize(AdSize.BANNER);
         LinearLayout layout = findViewById(R.id.admob_timer);

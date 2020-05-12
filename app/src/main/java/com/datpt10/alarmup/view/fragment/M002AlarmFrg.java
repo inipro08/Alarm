@@ -20,6 +20,7 @@ import com.datpt10.alarmup.presenter.M002AlarmPresenter;
 import com.datpt10.alarmup.view.adapter.AlarmAdapter;
 import com.datpt10.alarmup.view.event.OnM001HomePageCallBack;
 import com.datpt10.alarmup.view.event.OnM002AlarmCallBack;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
 
@@ -38,12 +39,13 @@ public class M002AlarmFrg extends BaseFragment<M002AlarmPresenter, OnM001HomePag
     private Disposable textColorPrimarySubscription;
     private View empty;
     private TextView emptyText;
+    private FloatingActionButton fladdAlarm;
 
 
     @Override
     protected void initViews() {
         recyclerAlarm = findViewById(R.id.rl_m002_list_alarm);
-        findViewById(R.id.ig_m002_add_alarm, this);
+        fladdAlarm = findViewById(R.id.ig_m002_add_alarm, this);
         empty = findViewById(R.id.empty);
         emptyText = findViewById(R.id.emptyText, Alarmup.getInstance().getRegularFont());
         emptyText.setText(R.string.txt_alarm_empty_text);

@@ -54,11 +54,14 @@
     <string name="txt_m004_item_00_00_00">00 : 00 : 00</string>
     <string name="txt_m002_item_vibrate">Rung</string>
     <string name="txt_m002_item_sound">Âm thanh</string>
+    <string name="txt_m002_item_delete">Xóa</string>
     <string name="txt_m005_update_language">Cập nhật ngôn ngữ</string>
     <string name="txt_bottom_bar_alarm">Báo thức</string>
     <string name="txt_bottom_bar_timezone">Timezone</string>
     <string name="txt_bottom_bar_timer">Bộ đếm giờ</string>
     <string name="txt_bottom_bar_settings">Cài đặt</string>
-    <string name="txt_dialog_timer">Vui lòng đặt bộ hẹn giờ lớn hơn 0 giây và dưới 24 giờ !</string>
-    <string name="txt_got_it">Hiểu rồi</string>
+    <string name="txt_dialog_timer">Vui lòng đặt bộ hẹn giờ lớn hơn 0 giây và nhỏ hơn 24 giờ !</string>
+    <string name="txt_from_now">%s từ lúc này.</string>
+    <string name="txt_got_it">I Got it</string>
+    <string name="txt_apply_language">The language has been updated successfully !</string>
 </resources>

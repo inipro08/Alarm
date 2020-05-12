@@ -41,6 +41,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements OnHomeB
         Intent intent = this.getIntent();
         if (getIntent().hasExtra(EXTRA_TIMER)) {
             TimerEntity timerEntity = getIntent().getParcelableExtra(EXTRA_TIMER);
+            assert timerEntity != null;
             int duration = (int) timerEntity.getDuration();
             int idEntity = timerEntity.getId();
             CommonUtil.getInstance().savePrefContent(EXTRA_TIMER, duration);

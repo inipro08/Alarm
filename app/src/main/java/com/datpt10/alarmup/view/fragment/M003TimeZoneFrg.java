@@ -14,7 +14,7 @@ import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.Utility;
 import com.datpt10.alarmup.base.BaseFragment;
 import com.datpt10.alarmup.model.DBManager;
-import com.datpt10.alarmup.model.entities.TimeZoneEntity;
+import com.datpt10.alarmup.model.TimeZoneEntity;
 import com.datpt10.alarmup.presenter.M003TimeZonePresenter;
 import com.datpt10.alarmup.view.adapter.SearchAdapter;
 import com.datpt10.alarmup.view.adapter.TimeZoneAdapter;

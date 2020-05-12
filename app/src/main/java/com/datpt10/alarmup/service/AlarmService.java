@@ -56,6 +56,7 @@ public class AlarmService extends Service {
                 .setSmallIcon(R.drawable.ic_alarm)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCustomContentView(notificationLayout)
+                .setCustomBigContentView(notificationLayout)
                 .setFullScreenIntent(getFullScreenIntent(getApplicationContext()), true)
                 .build();
 

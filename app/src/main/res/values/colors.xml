@@ -121,6 +121,6 @@
     <color name="colorWindowBackgroundThree">#2d4059</color>
     <color name="colorNavigationBarThree">#222831</color>
     <color name="colorPrimaryThree">#ff5722</color>
-    <color name="colorAccentThree">#eeeeee</color>
+    <color name="colorAccentThree">#222831</color>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.datpt10.alarmup.model.entities;
+package com.datpt10.alarmup.model;
 
 /**
  * create by datpt on 12/27/2019.

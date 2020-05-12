@@ -45,10 +45,67 @@
             android:id="@+id/spinner_m005"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
             android:backgroundTint="@color/colorAccent"
             android:theme="@style/Spinner"
             tools:targetApi="lollipop" />
+    </TableRow>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:layout_marginVertical="@dimen/d_5"
+        android:background="@color/colorAccent" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_m005_language"
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            android:layout_marginHorizontal="@dimen/d_10"
+            android:src="@drawable/ic_language"
+            android:tint="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/tv_m005_language"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/txt_m005_update_language"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/d_16"
+            android:textStyle="normal" />
+
+        <RadioGroup
+            android:id="@+id/rd_m005_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rd_m005_vn"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/d_20"
+                android:layout_marginHorizontal="@dimen/d_20"
+                android:text="VI"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/d_15" />
+
+            <RadioButton
+                android:id="@+id/rd_m005_en"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/d_20"
+                android:layout_marginEnd="@dimen/d_20"
+                android:layout_marginRight="@dimen/d_20"
+                android:text="EN"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/d_15" />
+
+        </RadioGroup>
     </TableRow>
 
     <View
@@ -147,7 +204,7 @@
                     android:layout_width="@dimen/d_25"
                     android:layout_height="@dimen/d_25"
                     android:src="@drawable/ic_rate"
-                    android:tint="@color/colorWhite" />
+                    android:tint="@color/colorAccent" />
 
                 <TextView
                     android:id="@+id/tv_m005_rate"

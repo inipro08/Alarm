@@ -1,13 +1,13 @@
 package com.datpt10.alarmup.base;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +15,16 @@ import androidx.fragment.app.FragmentManager;
 
 import com.afollestad.aesthetic.Aesthetic;
 import com.datpt10.alarmup.Alarmup;
+import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.presenter.BasePresenter;
+import com.datpt10.alarmup.util.CommonUtil;
 import com.datpt10.alarmup.util.StorageCommon;
+
+import java.util.Locale;
 
 public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements Alarmup.ActivityListener {
 
+    public static final String LANGUAGE_KEY = "LANGUAGE_KEY";
     protected static final int NO_LAYOUT = -1;
     private static final String TAG = BaseActivity.class.getName();
     public transient String currentTag;
@@ -55,10 +60,13 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     public final void onCreate(Bundle savedInstanceState) {
         Aesthetic.Companion.attach(this);
         super.onCreate(savedInstanceState);
+        String languageKey = CommonUtil.getInstance().getPrefContent(LANGUAGE_KEY);
+        if (languageKey == null || languageKey.equals("vi")) setLang("vi");
+        else setLang("en");
+
         Log.i(TAG, "BaseActivity: onCreate...");
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
         int layoutId = getLayoutId();
         if (layoutId != NO_LAYOUT) {
             setContentView(layoutId);
@@ -68,6 +76,15 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         alarmup.setListener(this);
         initViews();
         getSupportActionBar().hide();
+    }
+
+    public void setLang(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources resources = getResources();
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = myLocale;
+        resources.updateConfiguration(configuration, displayMetrics);
     }
 
     @Override

@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -18,11 +20,14 @@ import androidx.transition.TransitionManager;
 import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.Utility;
+import com.datpt10.alarmup.base.BaseActivity;
 import com.datpt10.alarmup.base.BaseFragment;
 import com.datpt10.alarmup.presenter.M005SettingsPresenter;
+import com.datpt10.alarmup.receiver.RefreshActivityReceiver;
 import com.datpt10.alarmup.util.CommonUtil;
 import com.datpt10.alarmup.view.event.OnM001HomePageCallBack;
 import com.datpt10.alarmup.view.event.OnM005SettingCallBack;
+import com.datpt10.alarmup.view.event.OnOKDialogCallBack;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -33,31 +38,40 @@ public class M005SettingsFrg extends BaseFragment<M005SettingsPresenter, OnM001H
     private static final String[] mTypeTheme = {
             "Default", "Theme 1", "Theme 2", "Theme 3"
     };
-    private TextView tvUpdateTheme, tvAbout, tvRate;
-    private ImageView ivUpdateTheme, ivAbout, ivRate, ivAuthor;
+    private TextView tvUpdateTheme, tvUpdateLanguae, tvAbout, tvRate;
+    private ImageView ivUpdateTheme, ivUpdateLanguage, ivAbout, ivRate, ivAuthor;
     private Spinner spinnerTheme;
     private LinearLayout lnAbout;
     private boolean isClickAbout;
-    private AdView mAdView;
+    private RadioButton rdVn, rdEn;
+    private RadioGroup rdGroup;
 
     @Override
     protected void initViews() {
-        mAdView = new AdView(mContext);
+        AdView mAdView = new AdView(mContext);
         mAdView.setAdUnitId("ca-app-pub-9133689301868303/4723680932");
         mAdView.setAdSize(AdSize.BANNER);
         LinearLayout layout = findViewById(R.id.layout_admob);
         layout.addView(mAdView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
-        tvUpdateTheme = findViewById(R.id.tv_m005_update_theme, Alarmup.getInstance().getRegularFont());
+        tvUpdateTheme = findViewById(R.id.tv_m005_update_theme, Alarmup.getInstance().getBoldFont());
         ivUpdateTheme = findViewById(R.id.iv_m005_update_theme);
-        tvAbout = findViewById(R.id.tv_m005_about, this, Alarmup.getInstance().getRegularFont());
+        tvUpdateLanguae = findViewById(R.id.tv_m005_language, Alarmup.getInstance().getBoldFont());
+        ivUpdateLanguage = findViewById(R.id.iv_m005_language);
+        tvAbout = findViewById(R.id.tv_m005_about, this, Alarmup.getInstance().getBoldFont());
         ivAbout = findViewById(R.id.iv_m005_about, this);
         tvRate = findViewById(R.id.tv_m005_rate, this, Alarmup.getInstance().getBoldFont());
         ivRate = findViewById(R.id.iv_m005_rate, this);
         ivAuthor = findViewById(R.id.iv_m005_author);
         lnAbout = findViewById(R.id.ln_m005_about);
+        rdVn = findViewById(R.id.rd_m005_vn, this, Alarmup.getInstance().getRegularFont());
+        rdEn = findViewById(R.id.rd_m005_en, this, Alarmup.getInstance().getRegularFont());
+        rdGroup = findViewById(R.id.rd_m005_group);
+
+        String languageKey = CommonUtil.getInstance().getPrefContent(BaseActivity.LANGUAGE_KEY);
+        if (languageKey == null || languageKey.equals("vi")) rdVn.setChecked(true);
+        else rdEn.setChecked(true);
 
         setSpinnerTheme();
     }
@@ -95,7 +109,6 @@ public class M005SettingsFrg extends BaseFragment<M005SettingsPresenter, OnM001H
 
     @Override
     protected void defineBackKey() {
-
     }
 
     @Override
@@ -123,7 +136,24 @@ public class M005SettingsFrg extends BaseFragment<M005SettingsPresenter, OnM001H
                             Uri.parse("http://play.google.com/store/apps/details?id=" + mContext.getPackageName())));
                 }
                 break;
+            case R.id.rd_m005_vn:
+                CommonUtil.getInstance().savePrefContent(BaseActivity.LANGUAGE_KEY, "vi");
+                refreshAppLanguage();
+                break;
+            case R.id.rd_m005_en:
+                CommonUtil.getInstance().savePrefContent(BaseActivity.LANGUAGE_KEY, "en");
+                refreshAppLanguage();
+                break;
         }
+    }
+
+    private void refreshAppLanguage() {
+        CommonUtil.getInstance().showDialog(mContext, mContext.getString(R.string.txt_apply_language), new OnOKDialogCallBack() {
+            @Override
+            public void handleOKButton1() {
+                mContext.sendBroadcast(new Intent(mContext, RefreshActivityReceiver.class));
+            }
+        });
     }
 
     @Override

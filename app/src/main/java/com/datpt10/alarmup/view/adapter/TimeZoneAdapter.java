@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.DBManager;
-import com.datpt10.alarmup.model.entities.TimeZoneEntity;
+import com.datpt10.alarmup.model.TimeZoneEntity;
 import com.datpt10.alarmup.util.CommonUtil;
 import com.datpt10.alarmup.view.event.OnM003TimeZoneCallBack;
 

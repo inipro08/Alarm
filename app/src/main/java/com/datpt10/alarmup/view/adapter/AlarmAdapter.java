@@ -22,7 +22,7 @@ import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
 import com.afollestad.aesthetic.Aesthetic;
-import com.datpt10.alarmnow.widget.AestheticCheckBoxView;
+import com.datpt10.alarmup.widget.AestheticCheckBoxView;
 import com.datpt10.alarmup.Alarmup;
 import com.datpt10.alarmup.R;
 import com.datpt10.alarmup.model.AlarmEntity;
@@ -285,7 +285,7 @@ public class AlarmAdapter extends BaseRecycleAdapter<OnM002AlarmCallBack, AlarmE
         Calendar nextAlarm = alarmEntity1.getNext();
         if (alarmEntity1.isEnabledToggle && nextAlarm != null) {
             int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(nextAlarm.getTimeInMillis() - Calendar.getInstance().getTimeInMillis());
-            alarmHolder.tvNextTime.setText(String.format("%s from now.", FormatUtils.formatUnit(mContext, minutes)));
+            alarmHolder.tvNextTime.setText(String.format(mContext.getString(R.string.txt_from_now), FormatUtils.formatUnit(mContext, minutes)));
         }
         alarmHolder.tvRingFile.setText(CommonUtil.getInstance().getFirstRingtone(mContext, alarmEntity1));
         alarmHolder.tvRingFile.setOnClickListener(view -> {

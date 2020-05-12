@@ -1,7 +1,7 @@
 package com.datpt10.alarmup.util;
 
 import com.datpt10.alarmup.Alarmup;
-import com.datpt10.alarmup.model.entities.TimeZoneEntity;
+import com.datpt10.alarmup.model.TimeZoneEntity;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;

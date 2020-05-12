@@ -88,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_45">
 
-                <com.datpt10.alarmnow.widget.AestheticCheckBoxView
+                <com.datpt10.alarmup.widget.AestheticCheckBoxView
                     android:id="@+id/repeat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -258,7 +258,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/d_5"
-                android:text="Delete"
+                android:text="@string/txt_m002_item_delete"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/d_17" />
 

@@ -348,7 +348,7 @@ public class Alarmup extends Application implements Player.EventListener {
     public void updateTheme() {
         if (Utility.getTheme(getApplicationContext()) == THEME_DEFAULT) {
             Aesthetic.Companion.get()
-                    .isDark(false)
+                    .isDark(true)
                     .lightStatusBarMode(AutoSwitchMode.OFF)
                     .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : ContextCompat.getColor(this, R.color.colorStatusBarDefault))
                     .colorPrimaryDark(ContextCompat.getColor(this, R.color.colorPrimaryDarkDefault))

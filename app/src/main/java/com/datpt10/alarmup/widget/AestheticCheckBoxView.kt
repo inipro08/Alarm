@@ -1,4 +1,4 @@
-package com.datpt10.alarmnow.widget
+package com.datpt10.alarmup.widget
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -26,7 +26,7 @@ class AestheticCheckBoxView : AppCompatCheckBox, Subscribblable {
     override fun subscribe() {
         colorAccentSubscription = Aesthetic.get().colorAccent()
                 .subscribe { integer ->
-                    val colorStateList = ColorStateList(
+                    ColorStateList(
                             arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
                             intArrayOf(Color.parseColor("#009FDA"), integer)
                     )
@@ -34,7 +34,7 @@ class AestheticCheckBoxView : AppCompatCheckBox, Subscribblable {
                 }
 
         textColorPrimarySubscription = Aesthetic.get().textColorPrimary()
-                .subscribe { integer -> setTextColor(ColorStateList.valueOf(Color.parseColor("#ffffff"))) }
+                .subscribe { setTextColor(ColorStateList.valueOf(Color.parseColor("#ffffff"))) }
     }
 
     override fun unsubscribe() {

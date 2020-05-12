@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -61,14 +62,15 @@
                 android:layout_weight="1" />
         </LinearLayout>
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/ig_m002_add_alarm"
-            android:layout_width="@dimen/d_60"
-            android:layout_height="@dimen/d_60"
-            android:layout_gravity="bottom|center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="@dimen/d_20"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_add_circle"
-            android:tint="@color/colorAccent" />
+            android:visibility="visible"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_add"
+            tools:ignore="VectorDrawableCompat" />
     </FrameLayout>
 </LinearLayout>

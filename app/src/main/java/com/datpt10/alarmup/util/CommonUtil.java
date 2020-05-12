@@ -272,6 +272,7 @@ public class CommonUtil {
         AlertDialog mAlert = new AlertDialog.Builder(context).create();
         doKeepDialog(mAlert);
         mAlert.setTitle(R.string.app_name);
+        mAlert.setCancelable(false);
         mAlert.setMessage(message);
         mAlert.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.txt_got_it), (dialogInterface, i) -> {
             if (onOKDialogCallBack == null) return;
